@@ -6,7 +6,10 @@
 //
 
 
-public func DeferredBuild<T>(_ builder: @escaping Deferred<T>, with flowBuilder: @escaping (T) -> Flow) -> Deferred<T> {
+public func DeferredBuild<T>(
+    _ builder: @escaping Deferred<T>,
+    with flowBuilder: @escaping (T) -> Flow
+) -> Deferred<T> {
     return {
         let object = builder()
         flowBuilder(object)()

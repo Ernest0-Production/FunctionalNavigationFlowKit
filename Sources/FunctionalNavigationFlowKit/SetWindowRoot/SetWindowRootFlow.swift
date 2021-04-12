@@ -8,6 +8,12 @@
 import UIKit
 
 
+public typealias SetWindowRootFlowTransitionConfiguration<
+    Window: UIWindow,
+    Root: UIViewController
+> = FlowConfiguration<Window, Root>
+
+
 public func SetWindowRootFlow<Window, Root>(
     in window: Window,
     configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,

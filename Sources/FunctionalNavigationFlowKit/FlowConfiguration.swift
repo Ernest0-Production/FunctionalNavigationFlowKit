@@ -7,21 +7,6 @@
 
 import UIKit
 
-public typealias PresentFlowTransitionConfiguration<
-    Presenting: UIViewController,
-    Presented: UIViewController
-> = FlowConfiguration<Presenting, Presented>
-
-public typealias PushFlowTransitionConfiguration<
-    NavigationStack: UINavigationController,
-    Item: UIViewController
-> = FlowConfiguration<NavigationStack, Item>
-
-public typealias SetWindowRootFlowTransitionConfiguration<
-    Window: UIWindow,
-    Root: UIViewController
-> = FlowConfiguration<Window, Root>
-
 
 
 public final class FlowConfiguration<Departure, Destination> {
