@@ -8,12 +8,6 @@
 import UIKit
 
 
-public typealias SetTabBarItemsFlowTransitionConfiguration<
-    TabBar: UITabBarController,
-    Item: UIViewController
-> = FlowConfiguration<TabBar, [Item]>
-
-
 public func SetTabBarItemsFlow<TabBar, Item>(
     in tabBarController: TabBar,
     animated: Bool = true,
