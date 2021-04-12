@@ -11,7 +11,7 @@ import UIKit
 public func PushFlow<NavigationStack, Item>(
     in navigationController: NavigationStack,
     animated: Bool = true,
-    _ configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
+    configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
     _ itemBuilder: @escaping Deferred<Item>
 ) -> Flow {
     onMainThread {
@@ -29,13 +29,13 @@ public func PushFlow<NavigationStack, Item>(
 public func PushFlow<NavigationStack, Item>(
     in navigationController: NavigationStack,
     animated: Bool = true,
-    _ configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
+    configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
     _ autoclosure_itemBuilder: @autoclosure @escaping Deferred<Item>
 ) -> Flow {
     PushFlow(
         in: navigationController,
         animated: animated,
-        configuration,
+        configuration: configuration,
         autoclosure_itemBuilder
     )
 }
@@ -44,14 +44,14 @@ public func PushFlow<NavigationStack, Item>(
 public func PushFlow<Dependency, NavigationStack, Item>(
     in navigationController: NavigationStack,
     animated: Bool = true,
-    _ configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
+    configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
     _ itemBuilder: @escaping (Dependency) -> Item
 ) -> (Dependency) -> Flow {
     return { (dependency: Dependency) in
         PushFlow(
             in: navigationController,
             animated: animated,
-            configuration,
+            configuration: configuration,
             itemBuilder(dependency)
         )
     }

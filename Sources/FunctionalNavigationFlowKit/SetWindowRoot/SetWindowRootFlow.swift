@@ -10,7 +10,7 @@ import UIKit
 
 public func SetWindowRootFlow<Window, Root>(
     in window: Window,
-    _ configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
+    configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
     _ rootBuilder: @escaping Deferred<Root>
 ) -> Flow {
     onMainThread {
@@ -25,25 +25,25 @@ public func SetWindowRootFlow<Window, Root>(
 
 public func SetWindowRootFlow<Window, Root>(
     in window: Window,
-    _ configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
+    configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
     _ autoclosure_rootBuilder: @autoclosure @escaping Deferred<Root>
 ) -> Flow {
     SetWindowRootFlow(
         in: window,
-        configuration,
+        configuration: configuration,
         autoclosure_rootBuilder
     )
 }
 
 public func SetWindowRootFlow<Dependency, Window, Root>(
     in window: Window,
-    _ configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
+    configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
     _ rootBuilder: @escaping (Dependency) -> Root
 ) -> (Dependency) -> Flow {
     return { (dependency: Dependency) in
         SetWindowRootFlow(
             in: window,
-            configuration,
+            configuration: configuration,
             rootBuilder(dependency)
         )
     }

@@ -15,13 +15,13 @@ public extension PushFlowTransitionConfiguration {
         })
     }
 
-    static func with(title: String?) -> PushFlowTransitionConfiguration {
+    static func title(_ title: String?) -> PushFlowTransitionConfiguration {
         PushFlowTransitionConfiguration({ _, item in
             item.navigationItem.title = title
         })
     }
 
-    static func with(titleView: UIView?) -> PushFlowTransitionConfiguration {
+    static func titleView(_ titleView: UIView?) -> PushFlowTransitionConfiguration {
         PushFlowTransitionConfiguration({ _, item in
             item.navigationItem.titleView = titleView
         })

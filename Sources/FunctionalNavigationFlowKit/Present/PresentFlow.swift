@@ -8,10 +8,11 @@
 import UIKit
 
 
+
 public func PresentFlow<Presenting, Presented>(
     in presenting: Presenting,
     animated: Bool = true,
-    _ configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
+    configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
     _ presentingBuilder: @escaping Deferred<Presented>,
     completionFlow: Flow? = nil
 ) -> Flow {
@@ -31,14 +32,14 @@ public func PresentFlow<Presenting, Presented>(
 public func PresentFlow<Presenting, Presented>(
     in presenting: Presenting,
     animated: Bool = true,
-    _ configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
+    configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
     _ autoclosure_presentedBuilder: @autoclosure @escaping Deferred<Presented>,
     completionFlow: Flow? = nil
 ) -> Flow {
     PresentFlow(
         in: presenting,
         animated: animated,
-        configuration,
+        configuration: configuration,
         autoclosure_presentedBuilder,
         completionFlow: completionFlow
     )
@@ -47,7 +48,7 @@ public func PresentFlow<Presenting, Presented>(
 public func PresentFlow<Dependency, Presenting, Presented>(
     in presenting: Presenting,
     animated: Bool = true,
-    _ configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
+    configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
     _ presentedBuilder: @escaping (Dependency) -> Presented,
     completionFlow: Flow? = nil
 ) -> (Dependency) -> Flow {
@@ -55,7 +56,7 @@ public func PresentFlow<Dependency, Presenting, Presented>(
         PresentFlow(
             in: presenting,
             animated: animated,
-            configuration,
+            configuration: configuration,
             presentedBuilder(dependency),
             completionFlow: completionFlow
         )
