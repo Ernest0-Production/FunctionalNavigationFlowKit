@@ -13,7 +13,8 @@ public func AlertFlow(
     animated: Bool = true,
     title: String? = nil,
     message: String? = nil,
-    style: UIAlertController.Style
+    style: UIAlertController.Style,
+    _ configuration: AlertFlowTransitionConfiguration = .empty
 ) -> Flow {
     onMainThread {
         let alertController = UIAlertController(
@@ -25,6 +26,7 @@ public func AlertFlow(
         PresentFlow(
             in: presenting,
             animated: animated,
+            configuration: configuration,
             alertController
         )()
     }
@@ -36,7 +38,8 @@ public func AlertFlow(
     animated: Bool = true,
     title: String? = nil,
     message: String? = nil,
-    style: UIAlertController.Style
+    style: UIAlertController.Style,
+    _ configuration: AlertFlowTransitionConfiguration = .empty
 ) -> Flow {
     onMainThread {
         guard let presenting = window.rootViewController?.topmostViewController() else {
@@ -48,7 +51,8 @@ public func AlertFlow(
             animated: animated,
             title: title,
             message: message,
-            style: style
+            style: style,
+            configuration
         )()
     }
 }
