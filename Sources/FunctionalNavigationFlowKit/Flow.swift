@@ -6,5 +6,3 @@
 //
 
 public typealias Flow = () -> Void
-
-public typealias Deferred<T> = () -> T
