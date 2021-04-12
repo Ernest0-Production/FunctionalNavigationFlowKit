@@ -7,24 +7,6 @@
 
 import UIKit
 
-func some() {
-    let flow: Flow = SetWindowRootFlow(
-        in: UIWindow(),
-        configuration: .combine(.empty),
-        DeferredBuild(UINavigationController.init) { vc in
-            PushFlow(in: vc,
-                     configuration: .title(""),
-                     UIViewController.init)
-        }
-
-    )
-}
-
-public typealias PresentFlowTransitionConfiguration<
-    Presenting: UIViewController,
-    Presented: UIViewController
-> = FlowConfiguration<Presenting, Presented>
-
 
 public func PresentFlow<Presenting, Presented>(
     in presenting: Presenting,
@@ -36,13 +18,15 @@ public func PresentFlow<Presenting, Presented>(
     onMainThread {
         let presented = presentingBuilder()
 
-        configuration.handler(presenting, presented)
+        configuration.prepareHandler?(presenting, presented)
 
         presenting.present(
             presented,
             animated: animated,
             completion: completionFlow
         )
+
+        configuration.completionHandler?(presenting, presented)
     }
 }
 

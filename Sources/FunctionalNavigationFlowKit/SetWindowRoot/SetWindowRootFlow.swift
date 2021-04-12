@@ -8,11 +8,6 @@
 import UIKit
 
 
-public typealias SetWindowRootFlowTransitionConfiguration<
-    Window: UIWindow,
-    Root: UIViewController
-> = FlowConfiguration<Window, Root>
-
 
 public func SetWindowRootFlow<Window, Root>(
     in window: Window,
@@ -22,10 +17,11 @@ public func SetWindowRootFlow<Window, Root>(
     onMainThread {
         let root = rootBuilder()
 
-        configuration.handler(window, root)
+        configuration.prepareHandler?(window, root)
 
         window.rootViewController = root
-        window.makeKeyAndVisible()
+
+        configuration.completionHandler?(window, root)
     }
 }
 

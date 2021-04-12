@@ -8,18 +8,23 @@
 import UIKit
 
 
-public func PopFlow(
+public typealias PopFlowTransitionConfiguration = PushFlowTransitionConfiguration
+
+
+public func PopFlow<NavigationStack, Item>(
     in navigationController: UINavigationController,
-    animated: Bool = true
+    animated: Bool = true,
+    configuration: PopFlowTransitionConfiguration<NavigationStack, Item> = .empty
 ) -> Flow {
     onMainThread {
         navigationController.popViewController(animated: animated)
     }
 }
 
-public func PopFlow(
-    in navigationController: UINavigationController,
+public func PopFlow<NavigationStack>(
+    in navigationController: NavigationStack,
     animated: Bool = true,
+    configuration: PopFlowTransitionConfiguration<NavigationStack, UIViewController> = .empty,
     to viewController: UIViewController
 ) -> Flow {
     onMainThread {
@@ -30,9 +35,10 @@ public func PopFlow(
     }
 }
 
-public func PopToRootFlow(
+public func PopToRootFlow<NavigationStack>(
     in navigationController: UINavigationController,
-    animated: Bool = true
+    animated: Bool = true,
+    configuration: PopFlowTransitionConfiguration<NavigationStack, UIViewController> = .empty
 ) -> Flow {
     onMainThread {
         navigationController.popToRootViewController(animated: animated)

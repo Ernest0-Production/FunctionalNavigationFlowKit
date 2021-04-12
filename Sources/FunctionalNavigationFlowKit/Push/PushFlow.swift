@@ -8,12 +8,6 @@
 import UIKit
 
 
-public typealias PushFlowTransitionConfiguration<
-    NavigationStack: UINavigationController,
-    Item: UIViewController
-> = FlowConfiguration<NavigationStack, Item>
-
-
 public func PushFlow<NavigationStack, Item>(
     in navigationController: NavigationStack,
     animated: Bool = true,
@@ -23,12 +17,14 @@ public func PushFlow<NavigationStack, Item>(
     onMainThread {
         let presentingController = itemBuilder()
 
-        configuration.handler(navigationController, presentingController)
+        configuration.prepareHandler?(navigationController, presentingController)
 
         navigationController.pushViewController(
             presentingController,
             animated: animated
         )
+
+        configuration.completionHandler?(navigationController, presentingController)
     }
 }
 

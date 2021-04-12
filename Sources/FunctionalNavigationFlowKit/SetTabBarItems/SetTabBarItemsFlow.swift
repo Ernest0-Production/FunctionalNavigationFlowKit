@@ -17,32 +17,34 @@ public typealias SetTabBarItemsFlowTransitionConfiguration<
 public func SetTabBarItemsFlow<TabBar, Item>(
     in tabBarController: TabBar,
     animated: Bool = true,
-    configuration: SetTabBarItemsFlowTransitionConfiguration<TabBar, Item>,
-    _ itemBuilders: [Deferred<Item>]
+    configuration: SetTabBarItemsFlowTransitionConfiguration<TabBar, Item>  = .empty,
+    items: [Item]
 ) -> Flow {
     onMainThread {
-        let viewControllers = itemBuilders.map({ $0() })
-
-        configuration.handler(tabBarController, viewControllers)
+        configuration.prepareHandler?(tabBarController, items)
 
         tabBarController.setViewControllers(
-            viewControllers,
+            items,
             animated: animated
         )
+
+        configuration.completionHandler?(tabBarController, items)
     }
 }
+
 
 public func SetTabBarItemsFlow<TabBar, Item>(
     in tabBarController: TabBar,
     animated: Bool = true,
-    configuration: SetTabBarItemsFlowTransitionConfiguration<TabBar, Item>,
-    _ items: [Item]
+    configuration: SetTabBarItemsFlowTransitionConfiguration<TabBar, Item> = .empty,
+    items itemBuilders: [Deferred<Item>]
 ) -> Flow {
-    SetTabBarItemsFlow(
-        in: tabBarController,
-        animated: animated,
-        configuration: configuration,
-        items.map({ item in { item } })
-    )
+    return {
+        SetTabBarItemsFlow(
+            in: tabBarController,
+            animated: animated,
+            configuration: configuration,
+            items: itemBuilders.map({ $0() })
+        )()
+    }
 }
-

@@ -8,29 +8,42 @@
 import UIKit
 
 
+public typealias PresentFlowTransitionConfiguration<
+    Presenting: UIViewController,
+    Presented: UIViewController
+> = FlowConfiguration<Presenting, Presented>
+
+
 public extension PresentFlowTransitionConfiguration {
     static func transitionStyle(_ modalTransitionStyle: UIModalTransitionStyle) -> PresentFlowTransitionConfiguration {
-        PresentFlowTransitionConfiguration({ _, presenting in
-            presenting.modalTransitionStyle = modalTransitionStyle
+        PresentFlowTransitionConfiguration(prepare: { _, presented in
+            presented.modalTransitionStyle = modalTransitionStyle
         })
     }
 
     static func presentedStyle(_ modalPresentedStyle: UIModalPresentationStyle) -> PresentFlowTransitionConfiguration {
-        PresentFlowTransitionConfiguration({ _, presenting in
-            presenting.modalPresentationStyle = modalPresentedStyle
+        PresentFlowTransitionConfiguration(prepare: { _, presented in
+            presented.modalPresentationStyle = modalPresentedStyle
         })
     }
 
     @available(iOS 13.0, *)
     static var modalInPresentation: PresentFlowTransitionConfiguration {
-        PresentFlowTransitionConfiguration({ _, presenting in
-            presenting.isModalInPresentation = true
+        PresentFlowTransitionConfiguration(prepare: { _, presented in
+            presented.isModalInPresentation = true
         })
     }
 
     static func transitionDelegate(_ transitionDelegate: UIViewControllerTransitioningDelegate) -> PresentFlowTransitionConfiguration {
-        PresentFlowTransitionConfiguration({ _, presenting in
-            presenting.transitioningDelegate = transitionDelegate
-        })
+        var currentDelegate: UIViewControllerTransitioningDelegate?
+
+        return PresentFlowTransitionConfiguration(
+            prepare: { _, presented in
+                currentDelegate = presented.transitioningDelegate
+                presented.transitioningDelegate = transitionDelegate
+            },
+            completion: { _, presented in
+                presented.transitioningDelegate = currentDelegate
+            })
     }
 }

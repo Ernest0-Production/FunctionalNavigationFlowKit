@@ -12,32 +12,46 @@ import UIKit
 public final class FlowConfiguration<Departure, Destination> {
     public typealias Handler = (_ departure: Departure, _ destination: Destination) -> Void
 
-    public init(_ handler: @escaping Handler) {
-        self.handler = handler
+    public init(
+        prepare: Handler? = nil,
+        completion: Handler? = nil
+    ) {
+        self.prepareHandler = prepare
+        self.completionHandler = completion
     }
 
-    let handler: Handler
+    let prepareHandler: Handler?
+    let completionHandler: Handler?
 }
 
 
 public extension FlowConfiguration {
-    static var empty: FlowConfiguration {
-        FlowConfiguration({ _, _ in })
+    static var empty: FlowConfiguration { FlowConfiguration() }
+
+    static func prepare(_ handler: @escaping Handler) -> FlowConfiguration {
+        FlowConfiguration(prepare: handler)
+    }
+
+    static func completion(_ handler: @escaping Handler) -> FlowConfiguration {
+        FlowConfiguration(completion: handler)
     }
 
     static func combine(_ configurations: [FlowConfiguration]) -> FlowConfiguration {
-        FlowConfiguration({ departure, destination in
-            for configuration in configurations {
-                configuration.handler(departure, destination)
+        FlowConfiguration(
+            prepare: { departure, destination in
+                for configuration in configurations {
+                    configuration.prepareHandler?(departure, destination)
+                }
+            },
+            completion:  { departure, destination in
+                for configuration in configurations {
+                    configuration.completionHandler?(departure, destination)
+                }
             }
-        })
+        )
     }
 
     static func combine(_ configurations: FlowConfiguration...) -> FlowConfiguration {
-        FlowConfiguration({ departure, destination in
-            for configuration in configurations {
-                configuration.handler(departure, destination)
-            }
-        })
+        combine(configurations)
     }
 }
