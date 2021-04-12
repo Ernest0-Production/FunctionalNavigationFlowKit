@@ -41,7 +41,7 @@ public func DismissFlow(
 
 public func DismissFlow(
     animated: Bool = true,
-    in window: UIWindow = UIApplication.shared.keyWindow!,
+    in window: UIWindow = KeyWindow,
     completionFlow: @escaping Flow
 ) -> Flow {
     return {
@@ -55,22 +55,4 @@ public func DismissFlow(
             completionFlow: completionFlow
         )()
     }
-}
-
-private extension UIViewController {
-   func topmostViewController() -> UIViewController {
-       if let presented = self.presentedViewController {
-           return presented.topmostViewController()
-       }
-
-       if let tabBarController = self as? UITabBarController {
-           return tabBarController.selectedViewController?.topmostViewController() ?? self
-       }
-
-       if let navigationController = self as? UINavigationController {
-        return navigationController.visibleViewController?.topmostViewController() ?? self
-       }
-
-       return self
-   }
 }

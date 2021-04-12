@@ -63,3 +63,61 @@ public func PresentFlow<Dependency, Presenting, Presented>(
         )
     }
 }
+
+// MARK: - Top Most Present
+
+public func PresentFlow<Presented>(
+    in window: UIWindow = KeyWindow,
+    animated: Bool = true,
+    configuration: PresentFlowTransitionConfiguration<UIViewController, Presented> = .empty,
+    _ presentingBuilder: @escaping Deferred<Presented>,
+    completionFlow: Flow? = nil
+) -> Flow {
+    onMainThread {
+        guard let presenting = window.rootViewController?.topmostViewController() else {
+            return
+        }
+
+        PresentFlow(
+            in: presenting,
+            animated: animated,
+            configuration: configuration,
+            presentingBuilder,
+            completionFlow: completionFlow
+        )()
+    }
+}
+
+public func PresentFlow<Presented>(
+    in window: UIWindow = KeyWindow,
+    animated: Bool = true,
+    configuration: PresentFlowTransitionConfiguration<UIViewController, Presented> = .empty,
+    _ autoclosure_presentedBuilder: @autoclosure @escaping Deferred<Presented>,
+    completionFlow: Flow? = nil
+) -> Flow {
+    PresentFlow(
+        in: window,
+        animated: animated,
+        configuration: configuration,
+        autoclosure_presentedBuilder,
+        completionFlow: completionFlow
+    )
+}
+
+public func PresentFlow<Dependency, Presented>(
+    in window: UIWindow = KeyWindow,
+    animated: Bool = true,
+    configuration: PresentFlowTransitionConfiguration<UIViewController, Presented> = .empty,
+    _ presentedBuilder: @escaping (Dependency) -> Presented,
+    completionFlow: Flow? = nil
+) -> (Dependency) -> Flow {
+    return { (dependency: Dependency) in
+        PresentFlow(
+            in: window,
+            animated: animated,
+            configuration: configuration,
+            presentedBuilder(dependency),
+            completionFlow: completionFlow
+        )
+    }
+}
