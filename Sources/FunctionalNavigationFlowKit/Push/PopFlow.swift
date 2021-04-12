@@ -17,7 +17,6 @@ public func PopFlow(
     }
 }
 
-
 public func PopFlow(
     in navigationController: UINavigationController,
     animated: Bool = true,

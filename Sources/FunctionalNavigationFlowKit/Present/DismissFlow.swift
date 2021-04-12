@@ -8,7 +8,7 @@
 import UIKit
 
 
-func DismissFlow(
+public func DismissFlow(
     animated: Bool = true,
     _ controller: UIViewController,
     completionFlow: @escaping Flow
@@ -21,8 +21,7 @@ func DismissFlow(
     }
 }
 
-
-func DismissFlow(
+public func DismissFlow(
     animated: Bool = true,
     in presentingController: UIViewController,
     completionFlow: @escaping Flow
@@ -40,7 +39,7 @@ func DismissFlow(
     }
 }
 
-func DismissFlow(
+public func DismissFlow(
     animated: Bool = true,
     in window: UIWindow = UIApplication.shared.keyWindow!,
     completionFlow: @escaping Flow
