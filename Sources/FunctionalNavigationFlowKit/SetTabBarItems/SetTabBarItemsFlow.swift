@@ -26,7 +26,6 @@ public func SetTabBarItemsFlow<TabBar, Item>(
     }
 }
 
-
 public func SetTabBarItemsFlow<TabBar, Item>(
     in tabBarController: TabBar,
     animated: Bool = true,

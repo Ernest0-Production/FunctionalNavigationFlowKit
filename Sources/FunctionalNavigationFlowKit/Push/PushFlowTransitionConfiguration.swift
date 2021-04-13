@@ -40,7 +40,8 @@ public extension PushFlowTransitionConfiguration {
             prepare: { navigationStack, _ in
                 currentDelegate = navigationStack.delegate
                 navigationStack.delegate = delegate
-            }, completion: { navigationStack, _ in
+            },
+            completion: { navigationStack, _ in
                 navigationStack.delegate = currentDelegate
             })
     }

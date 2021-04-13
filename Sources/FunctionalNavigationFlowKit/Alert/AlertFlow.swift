@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AlertFlow.swift
 //  
 //
 //  Created by Бабаян Эрнест on 13.04.2021.
@@ -11,9 +11,9 @@ import UIKit
 public func AlertFlow(
     in presenting: UIViewController,
     animated: Bool = true,
-    title: String? = nil,
+    title: String,
     message: String? = nil,
-    style: UIAlertController.Style,
+    style: UIAlertController.Style = .alert,
     _ configuration: AlertFlowTransitionConfiguration = .empty
 ) -> Flow {
     onMainThread {
@@ -36,9 +36,9 @@ public func AlertFlow(
 public func AlertFlow(
     in window: UIWindow = KeyWindow,
     animated: Bool = true,
-    title: String? = nil,
+    title: String,
     message: String? = nil,
-    style: UIAlertController.Style,
+    style: UIAlertController.Style = .alert,
     _ configuration: AlertFlowTransitionConfiguration = .empty
 ) -> Flow {
     onMainThread {

@@ -42,7 +42,6 @@ public func PushFlow<NavigationStack, Item>(
     )
 }
 
-
 public func PushFlow<Dependency, NavigationStack, Item>(
     in navigationController: NavigationStack,
     animated: Bool = true,

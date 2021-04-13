@@ -18,3 +18,10 @@ public func DeferredBuild<T>(
         return object
     }
 }
+
+public func DeferredBuild<T>(
+    _ autoclosure_builder: @autoclosure @escaping Deferred<T>,
+    with flowBuilder: @escaping (T) -> Flow
+) -> Deferred<T> {
+    DeferredBuild(autoclosure_builder, with: flowBuilder)
+}

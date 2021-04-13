@@ -17,4 +17,10 @@ public extension AlertFlowTransitionConfiguration {
             actions.forEach(alert.addAction) 
         })
     }
+
+    static func action(_ action: UIAlertAction) -> AlertFlowTransitionConfiguration {
+        AlertFlowTransitionConfiguration(prepare: { _ , alert in
+            alert.addAction(action)
+        })
+    }
 }

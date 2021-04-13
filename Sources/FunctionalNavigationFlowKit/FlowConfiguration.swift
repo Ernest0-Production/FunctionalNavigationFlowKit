@@ -8,7 +8,6 @@
 import UIKit
 
 
-
 public final class FlowConfiguration<Departure, Destination> {
     public typealias Handler = (_ departure: Departure, _ destination: Destination) -> Void
 

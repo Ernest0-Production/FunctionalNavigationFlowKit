@@ -11,21 +11,21 @@ import UIKit
 public typealias PopFlowTransitionConfiguration = PushFlowTransitionConfiguration
 
 
-public func PopFlow<NavigationStack, Item>(
-    in navigationController: UINavigationController,
+public func PopFlow<NavigationStack>(
+    in navigationController: NavigationStack,
     animated: Bool = true,
-    configuration: PopFlowTransitionConfiguration<NavigationStack, Item> = .empty
+    configuration: PopFlowTransitionConfiguration<NavigationStack, UIViewController> = .empty
 ) -> Flow {
     onMainThread {
         navigationController.popViewController(animated: animated)
     }
 }
 
-public func PopFlow<NavigationStack>(
+public func PopFlow<NavigationStack, Item>(
     in navigationController: NavigationStack,
     animated: Bool = true,
-    configuration: PopFlowTransitionConfiguration<NavigationStack, UIViewController> = .empty,
-    to viewController: UIViewController
+    configuration: PopFlowTransitionConfiguration<NavigationStack, Item> = .empty,
+    to viewController: Item
 ) -> Flow {
     onMainThread {
         navigationController.popToViewController(
@@ -36,7 +36,7 @@ public func PopFlow<NavigationStack>(
 }
 
 public func PopToRootFlow<NavigationStack>(
-    in navigationController: UINavigationController,
+    in navigationController: NavigationStack,
     animated: Bool = true,
     configuration: PopFlowTransitionConfiguration<NavigationStack, UIViewController> = .empty
 ) -> Flow {
