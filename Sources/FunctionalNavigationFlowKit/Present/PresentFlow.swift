@@ -46,23 +46,6 @@ public func PresentFlow<Presenting, Presented>(
     )
 }
 
-public func PresentFlow<Dependency, Presenting, Presented>(
-    in presenting: Presenting,
-    animated: Bool = true,
-    configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
-    _ presentedBuilder: @escaping (Dependency) -> Presented,
-    completionFlow: Flow? = nil
-) -> (Dependency) -> Flow {
-    return { (dependency: Dependency) in
-        PresentFlow(
-            in: presenting,
-            animated: animated,
-            configuration: configuration,
-            presentedBuilder(dependency),
-            completionFlow: completionFlow
-        )
-    }
-}
 
 // MARK: - Top Most Present
 
@@ -102,22 +85,4 @@ public func PresentFlow<Presented>(
         autoclosure_presentedBuilder,
         completionFlow: completionFlow
     )
-}
-
-public func PresentFlow<Dependency, Presented>(
-    in window: UIWindow = KeyWindow,
-    animated: Bool = true,
-    configuration: PresentFlowTransitionConfiguration<UIViewController, Presented> = .empty,
-    _ presentedBuilder: @escaping (Dependency) -> Presented,
-    completionFlow: Flow? = nil
-) -> (Dependency) -> Flow {
-    return { (dependency: Dependency) in
-        PresentFlow(
-            in: window,
-            animated: animated,
-            configuration: configuration,
-            presentedBuilder(dependency),
-            completionFlow: completionFlow
-        )
-    }
 }

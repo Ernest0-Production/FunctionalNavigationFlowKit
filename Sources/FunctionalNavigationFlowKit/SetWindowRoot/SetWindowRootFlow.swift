@@ -36,17 +36,3 @@ public func SetWindowRootFlow<Window, Root>(
         autoclosure_rootBuilder
     )
 }
-
-public func SetWindowRootFlow<Dependency, Window, Root>(
-    in window: Window,
-    configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
-    _ rootBuilder: @escaping (Dependency) -> Root
-) -> (Dependency) -> Flow {
-    return { (dependency: Dependency) in
-        SetWindowRootFlow(
-            in: window,
-            configuration: configuration,
-            rootBuilder(dependency)
-        )
-    }
-}

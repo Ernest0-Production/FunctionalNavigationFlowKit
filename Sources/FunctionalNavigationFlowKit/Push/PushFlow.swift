@@ -41,19 +41,3 @@ public func PushFlow<NavigationStack, Item>(
         autoclosure_itemBuilder
     )
 }
-
-public func PushFlow<Dependency, NavigationStack, Item>(
-    in navigationController: NavigationStack,
-    animated: Bool = true,
-    configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
-    _ itemBuilder: @escaping (Dependency) -> Item
-) -> (Dependency) -> Flow {
-    return { (dependency: Dependency) in
-        PushFlow(
-            in: navigationController,
-            animated: animated,
-            configuration: configuration,
-            itemBuilder(dependency)
-        )
-    }
-}
