@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "FunctionalNavigationFlowKit",
+    platforms: [.iOS(.v8)],
     products: [
         .library(
             name: "FunctionalNavigationFlowKit",
