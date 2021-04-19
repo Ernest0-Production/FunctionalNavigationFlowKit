@@ -78,9 +78,10 @@ SetWindowRootFlow(
 
 ## Overview
 
-- [Requirements](#Requirements)
-- [Usage](#usage)
-- [Why should I choose DeclarativeLayoutKit over **alternative**?](#why-should-i-choose-this-framework)
+- [Requirements](#requirements)
+- [В чем смысл?](#-в-чем-смысл)
+- [Конфигурация Flow](#%EF%B8%8F-конфигурация-flow)
+- [Зачем все это нужно?](#-зачем-все-это-нужно-чем-это-лучше-coordinator---паттерна)
 - [Installation](#installation)
 - [Credits](#credits)
 - [License](#license)
