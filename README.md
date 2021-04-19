@@ -32,7 +32,7 @@ SetWindowRootFlow(
                                     in: navigationController,
                                     configuration: .combine(
                                         .title(item.name),
-                                        hidesBottomBarWhenPushed
+                                        .hidesBottomBarWhenPushed
                                     ),
                                     ItemDetailsViewController(
                                         with: item,
