@@ -22,7 +22,7 @@ public extension SetWindowRootFlowTransitionConfiguration {
     }
 
     static func animated(duration: TimeInterval, completionFlow: Flow? = nil) -> SetWindowRootFlowTransitionConfiguration {
-        SetWindowRootFlowTransitionConfiguration(completion:{ window, _ in
+        SetWindowRootFlowTransitionConfiguration(completion: { window, _ in
             UIView.transition(
                 with: window,
                 duration: duration,

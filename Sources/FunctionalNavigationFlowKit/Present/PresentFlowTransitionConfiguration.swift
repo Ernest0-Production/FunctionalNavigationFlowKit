@@ -1,6 +1,6 @@
 //
 //  PresentFlowTransitionConfiguration.swift
-//  
+//
 //
 //  Created by Бабаян Эрнест on 12.04.2021.
 //
@@ -21,9 +21,9 @@ public extension PresentFlowTransitionConfiguration {
         })
     }
 
-    static func presentedStyle(_ modalPresentedStyle: UIModalPresentationStyle) -> PresentFlowTransitionConfiguration {
+    static func presentationStyle(_ modalPresentationStyle: UIModalPresentationStyle) -> PresentFlowTransitionConfiguration {
         PresentFlowTransitionConfiguration(prepare: { _, presented in
-            presented.modalPresentationStyle = modalPresentedStyle
+            presented.modalPresentationStyle = modalPresentationStyle
         })
     }
 
