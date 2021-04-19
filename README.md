@@ -30,7 +30,10 @@ SetWindowRootFlow(
                             itemFlow: { item in
                                 PushFlow(
                                     in: navigationController,
-                                    configuration: .title(item.name),
+                                    configuration: .combine(
+                                        .title(item.name),
+                                        hidesBottomBarWhenPushed
+                                    ),
                                     ItemDetailsViewController(
                                         with: item,
                                         commentsFlow: PresentFlow(
