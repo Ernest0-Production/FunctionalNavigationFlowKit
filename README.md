@@ -1,6 +1,6 @@
 # FunctionalNavigationFlowKit
 
-Функциональный способ описания UI навигации.
+Функциональный способ описания UI навигации. 
 
 ## 🗺 Пример
 ```swift
@@ -81,13 +81,13 @@ SetWindowRootFlow(
 
 ## Overview
 
-- [Requirements](#requirements)
+- [Требования](#requirements)
 - [В чем смысл?](#-в-чем-смысл)
 - [Конфигурация Flow](#%EF%B8%8F-конфигурация-flow)
 - [Зачем все это нужно?](#-зачем-все-это-нужно-чем-это-лучше-coordinator---паттерна)
-- [Installation](#installation)
-- [Credits](#credits)
-- [License](#license)
+- [Установка](#installation)
+- [Контакты](#credits)
+- [Лицензия](#license)
 
 
 ## Requirements
@@ -100,8 +100,9 @@ SetWindowRootFlow(
 ## 🤨 В чем смысл?
 Навигация - это действие (push, flow, set, и т.д.).\
 Действие можно описать ввиде кложура `() -> Void`. Называть его будем просто `Flow`.\
-Теперь мы можем написать фабрику методов для создания `Flow`. В данном фреймворке представлены следующие (глобальные) методы:
+Теперь можем написать фабрику методов для создания `Flow`. В данном фреймворке представлены следующие (базовые) методы:
 #### `PushFlow`
+[PushFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PushFlow.swift)
 ```swift
 PushFlow(
     in: myNavigationController,
@@ -109,6 +110,7 @@ PushFlow(
 )
 ```
 #### `PopFlow`
+[PopFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PopFlow.swift)
 ```swift
 PopFlow(in: myNavigationController)
 
@@ -120,29 +122,32 @@ PopFlow(
 PopToRootFlow(in: myNavigationController)
 ```
 #### `PresentFlow`
+[PresentFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Present/PresentFlow.swift)
 ```swift
 Present(
     in: rootViewController,
     MyModalViewController()
 )
 
-// Ищет самый верхний контроллер и презентит в нём.
+// Ищет самый верхний контроллер в окне и презентит в нём.
 Present(
     in: window,
     MyModalViewController()
 )
 ```
 #### `DismissFlow`
+[DismissFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Present/DismissFlow.swift)
 ```swift
 DismissFlow(myViewController)
 
 // Дисмисит контроллер, который презентовал указанный контроллер
 DismissFlow(in: presentedViewController)
 
-// Дисмисит самой верхний контроллер в окен
+// Дисмисит самой верхний контроллер в окне
 DismissFlow(in: window)
 ```
 #### `SetTabBarItemsFlow`
+[SetTabBarItemsFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetTabBarItems/SetTabBarItemsFlow.swift)
 ```swift
 SetTabBarItemsFlow(
     in: tabBarController,
@@ -153,6 +158,7 @@ SetTabBarItemsFlow(
 )
 ```
 #### `SetWindowRootFlow`
+[SetWindowRootFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetWindowRoot/SetWindowRootFlow.swift)
 ```swift
 SetWindowRootFlow(
     in: window,
@@ -160,6 +166,7 @@ SetWindowRootFlow(
 )
 ```
 #### `AlertFlow`
+[AlertFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Alert/AlertFlow.swift)
 ```swift
 AlertFlow(
     in: myViewController,
@@ -167,19 +174,18 @@ AlertFlow(
     message: "A you sure?"
 )
 
-// Ищет самый верхний контроллер и презентит в нём.
+// Ищет самый верхний контроллер в окне и презентит в нём.
 AlertFlow(
     in window: window
     title: "Hello",
     message: "A you sure?"
 )
-
 ```
 
-Если этого кажется недостаточным, вы можете написать свою функцию похожим образом.
+Если этого кажется недостаточным, вы можете написать свою функцию аналогичным образом через глобальные функции возвращающие Flow (т.е. кложур).
 
 ## ⚙️ Конфигурация `Flow`
-Каждый `Flow` имеет конфигурацию `FlowTransitionConfiguration`, которая запускается **перед** и **после** выполнения.
+Каждый `Flow` имеет конфигурацию [`FlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/FlowConfiguration.swift), которая запускается **перед** и **после** выполнения.
 ```swift
 let configuration = FlowTransitionConfiguration<UINavigationController, UIViewController>(
     prepare: { navigationController, viewController in  
@@ -197,28 +203,28 @@ return PushFlow(
 )
 ```
 
-Фреймфорк уже предоставляет основной набор конфигураций:
+Фреймфорк уже предоставляет базовый набор конфигураций:
 ---
- `PushFlowTransitionConfiguration` == `FlowTransitionConfiguration<UINavigationController, UIViewController>`
+ [`PushFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PushFlowTransitionConfiguration.swift) == `FlowTransitionConfiguration<UINavigationController, UIViewController>`
 - `hidesBottomBarWhenPushed`
 - `title(String?)`
 - `titleView(UIView?)`
 - `navigationDelegate(UINavigationControllerDelegate)`
 ---
-`PresentFlowTransitionConfiguration` == `FlowTransitionConfiguration<UIViewController, UIViewController>`
+[`PresentFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Present/PresentFlowTransitionConfiguration.swift) == `FlowTransitionConfiguration<UIViewController, UIViewController>`
 - `transitionStyle(UIModalTransitionStyle)`
 - `presentationStyle(UIModalPresentationStyle)`
 - `modalInPresentation`
 - `transitionDelegate(UIViewControllerTransitioningDelegate)`
 ---
-`SetTabBarItemsFlowTransitionConfiguration` == `FlowTransitionConfiguration<UITabBarController, UIViewController>`
+[`SetTabBarItemsFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetTabBarItems/SetTabBarItemsFlowTransitionConfiguration.swift) == `FlowTransitionConfiguration<UITabBarController, UIViewController>`
 - `titlePositionAdjustment(UIOffset)`
 ---
-`SetWindowRootFlowTransitionConfiguration`== `FlowTransitionConfiguration<UIWindow, UIViewController>`
+[`SetWindowRootFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetWindowRoot/SetWindowRootFlowTransitionConfiguration.swift)== `FlowTransitionConfiguration<UIWindow, UIViewController>`
 - `keyAndVisible`
 - `animated(duration: TimeInterval, completion: Flow?)`
 ---
-`AlertFlowTransitionConfiguration` == `FlowConfiguration<UIViewController, UIAlertController>``
+[`AlertFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Alert/AlertFlowTransitionConfiguration.swift) == `FlowConfiguration<UIViewController, UIAlertController>``
 - `actions([UIAlertAction])`
 - `action(UIAlertAction)`
 ---
@@ -227,12 +233,20 @@ return PushFlow(
 
 `Push/Present/Set/...Flow` принимают `() -> ViewController` билдер.
 > Для каждого представленного `Flow` есть альтернативная инициализация с `@autoclosure` билдером.
-
+```swift
+// контроллер еще не проинициализирован
+let flow = PushFlow(
+    in: myNavigationController,
+    MyViewController()
+)
+// контроллер проинициализирован и запушен
+flow()
+```
 
 ## 😑 Зачем все это нужно? Чем это лучше Coordinator - паттерна?
 1. Подобный подход позволяет **декларативно** описать **карту навигации**, скрывая детали презентации и сборки экрана.
 2. Делает **независимым** навигацию от конкретного экрана. Иными словами, презентуемый и презентующий контроллер не знают (и не должны знать), как будут отображаться в иерархии окон. Такой подход позволяет легко поменять тип презентации и контекст, в котором презентуется экран, без необходимости изменять что-то несвязанное с навигацией...*open/closed principle*  (пересекается с пунктом 1).
-3. В `swift` можно писать *вложенные функции*. Учитывая то, что при работе с навигацией **важно иметь доступ ко всей иерархии из любого презентуемого контекста** приложения, вложенные функциии являются удобным решением для описания какого-то внутреннего скоупа навигации. Имея доступ к внешним(глобальном для внутренней фунции) переменменным, пропадает необходимость использования *constructor/property/method injection* паттернов ООП, которая часто используется в `Coordinator`-ах при передаче зависимостей в дочерние(n-ой вложенности) координаторы через дерево/цепочку вызовов, приводящих к созданию транзитивных зависимостей.
+3. В `swift` можно писать *вложенные функции*. Учитывая то, что при работе с навигацией **важно иметь доступ ко всей иерархии из любого презентуемого контекста** приложения, вложенные функциии являются удобным решением для описания какого-то внутреннего скоупа навигации. Имея доступ к внешним(глобальном для внутренней фунции) переменменным, пропадает необходимость использования *constructor/property/method injection* из ООП, которая часто используется в `Coordinator`-ах при передаче зависимостей в дочерние(n-ой вложенности) координаторы через дерево/цепочку вызовов, приводящих к созданию транзитивных зависимостей.
 
 
 ## Installation
@@ -248,25 +262,19 @@ target 'YOUR_TARGET_NAME' do
 end
 ```
 
-Replace `YOUR_TARGET_NAME` and then, in the `Podfile` directory, type:
-
-```bash
-$ pod install
-```
-
 #### [Swift Package Manager](https://github.com/apple/swift-package-manager)
 
 Create a `Package.swift` file.
 
 ```swift
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 
 import PackageDescription
 
 let package = Package(
   name: "YOUR_PROJECT_NAME",
   dependencies: [
-      .package(url: "https://github.com/Ernest0-Production/DeclarativeLayoutKit.git", from: "1.0.0")
+      .package(url: "https://github.com/Ernest0-Production/FunctionalNavigationFlowKit.git", from: "1.0.0")
   ],
   targets: [
       .target(name: "YOUR_TARGET_NAME", dependencies: ["FunctionalNavigationFlowKit"])
@@ -282,6 +290,6 @@ let package = Package(
 
 ### License
 
-DeclarativeLayoutKit is released under the MIT license. See [LICENSE](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/master/LICENSE.md) for details.
+FunctionalNavigationFlowKit is released under the MIT license. See [LICENSE](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/master/LICENSE.md) for details.
 
 ---
