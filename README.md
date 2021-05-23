@@ -165,22 +165,6 @@ SetWindowRootFlow(
     myRootViewController
 )
 ```
-#### `AlertFlow`
-[AlertFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Alert/AlertFlow.swift)
-```swift
-AlertFlow(
-    in: myViewController,
-    title: "Hello",
-    message: "A you sure?"
-)
-
-// Ищет самый верхний контроллер в окне и презентит в нём.
-AlertFlow(
-    in window: window
-    title: "Hello",
-    message: "A you sure?"
-)
-```
 
 Если этого кажется недостаточным, вы можете написать свою функцию аналогичным образом через глобальные функции возвращающие Flow (т.е. кложур).
 
@@ -223,10 +207,6 @@ return PushFlow(
 [`SetWindowRootFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetWindowRoot/SetWindowRootFlowTransitionConfiguration.swift)== `FlowTransitionConfiguration<UIWindow, UIViewController>`
 - `keyAndVisible`
 - `animated(duration: TimeInterval, completion: Flow?)`
----
-[`AlertFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Alert/AlertFlowTransitionConfiguration.swift) == `FlowConfiguration<UIViewController, UIAlertController>``
-- `actions([UIAlertAction])`
-- `action(UIAlertAction)`
 ---
 ## ⏰ Ленивая инициализация
 Презентуемые контроллеры инициализируются **только при запуске `Flow`!**
@@ -276,7 +256,7 @@ import PackageDescription
 let package = Package(
   name: "YOUR_PROJECT_NAME",
   dependencies: [
-      .package(url: "https://github.com/Ernest0-Production/FunctionalNavigationFlowKit.git", from: "1.0.0")
+      .package(url: "https://github.com/Ernest0-Production/FunctionalNavigationFlowKit.git", from: "0.0.1")
   ],
   targets: [
       .target(name: "YOUR_TARGET_NAME", dependencies: ["FunctionalNavigationFlowKit"])
@@ -287,7 +267,6 @@ let package = Package(
 ### Credits
 
 - [Telegram](https://t.me/Ernest0n)
-- [Twitter](https://twitter.com/Ernest0N)
 
 
 ### License
