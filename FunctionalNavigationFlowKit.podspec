@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "FunctionalNavigationFlowKit"
-  spec.version      = "0.0.1"
+  spec.version      = "0.0.2"
   spec.summary      = "Functional way of declarative description of UI navigation."
   spec.homepage     = "https://github.com/Ernest0-Production/FunctionalNavigationFlowKit"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
   spec.social_media_url   = "https://t.me/Ernest0n"
 
   spec.platform     = :ios
-  spec.ios.deployment_target = "8.0"
+  spec.ios.deployment_target = "9.0"
 
   spec.source       = {
     :git => "https://github.com/Ernest0-Production/FunctionalNavigationFlowKit.git",

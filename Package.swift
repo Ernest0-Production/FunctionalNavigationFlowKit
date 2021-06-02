@@ -8,14 +8,15 @@ let package = Package(
     products: [
         .library(
             name: "FunctionalNavigationFlowKit",
-            targets: ["FunctionalNavigationFlowKit"]),
+            targets: ["FunctionalNavigationFlowKit"]
+        ),
     ],
     targets: [
-        .target(
-            name: "FunctionalNavigationFlowKit",
-            dependencies: []),
+        .target(name: "FunctionalNavigationFlowKit", dependencies: []),
+
         .testTarget(
             name: "FunctionalNavigationFlowKitTests",
-            dependencies: ["FunctionalNavigationFlowKit"]),
+            dependencies: ["FunctionalNavigationFlowKit"]
+        ),
     ]
 )
