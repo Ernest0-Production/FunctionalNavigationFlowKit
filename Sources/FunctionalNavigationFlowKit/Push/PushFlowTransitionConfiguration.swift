@@ -33,6 +33,30 @@ public extension PushFlowTransitionConfiguration {
         })
     }
 
+    static func leftBarButton(animated: Bool = true, _ item: UIBarButtonItem) -> PushFlowTransitionConfiguration {
+        PushFlowTransitionConfiguration.prepare({ _, controller in
+            controller.navigationItem.setLeftBarButton(item, animated: animated)
+        })
+    }
+    
+    static func leftBarButtonItems(animated: Bool = true, _ items: [UIBarButtonItem]) -> PushFlowTransitionConfiguration {
+        PushFlowTransitionConfiguration.prepare({ _, controller in
+            controller.navigationItem.setLeftBarButtonItems(items, animated: animated)
+        })
+    }
+    
+    static func rightBarButton(animated: Bool = true, _ item: UIBarButtonItem) -> PushFlowTransitionConfiguration {
+        PushFlowTransitionConfiguration.prepare({ _, controller in
+            controller.navigationItem.setRightBarButton(item, animated: animated)
+        })
+    }
+    
+    static func rightBarButtonItems(animated: Bool = true, _ items: [UIBarButtonItem]) -> PushFlowTransitionConfiguration {
+        PushFlowTransitionConfiguration.prepare({ _, controller in
+            controller.navigationItem.setRightBarButtonItems(items, animated: animated)
+        })
+    }
+    
     static func navigationDelegate(_ delegate: UINavigationControllerDelegate) -> PushFlowTransitionConfiguration {
         var currentDelegate: UINavigationControllerDelegate?
 
