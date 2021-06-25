@@ -11,7 +11,7 @@ import UIKit
 public func DismissFlow(
     animated: Bool = true,
     _ controller: UIViewController,
-    completionFlow: @escaping Flow
+    completionFlow: Flow? = nil
 ) -> Flow {
     onMainThread {
         controller.dismiss(
@@ -24,10 +24,11 @@ public func DismissFlow(
 public func DismissFlow(
     animated: Bool = true,
     in presentingController: UIViewController,
-    completionFlow: @escaping Flow
+    completionFlow:Flow? = nil
 ) -> Flow {
     return {
         guard let presentedController = presentingController.presentedViewController else {
+            assertionFailure("\(presentingController) has not any presented View Controller ")
             return
         }
 
@@ -42,10 +43,11 @@ public func DismissFlow(
 public func DismissFlow(
     animated: Bool = true,
     in window: UIWindow = KeyWindow,
-    completionFlow: @escaping Flow
+    completionFlow: Flow? = nil
 ) -> Flow {
     return {
         guard let topmostViewController = window.rootViewController?.topmostViewController() else {
+            assertionFailure("\(window) has not rootViewController")
             return
         }
 
