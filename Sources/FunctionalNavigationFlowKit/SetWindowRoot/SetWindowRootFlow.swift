@@ -10,11 +10,12 @@ import UIKit
 
 
 public func SetWindowRootFlow<Window, Root>(
-    in window: Window,
+    in windowBuilder: @escaping @autoclosure () -> Window,
     configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
     _ rootBuilder: @escaping Deferred<Root>
 ) -> Flow {
     onMainThread {
+        let window = windowBuilder()
         let root = rootBuilder()
 
         configuration.prepareHandler?(window, root)
@@ -26,12 +27,12 @@ public func SetWindowRootFlow<Window, Root>(
 }
 
 public func SetWindowRootFlow<Window, Root>(
-    in window: Window,
+    in windowBuilder: @escaping @autoclosure () -> Window,
     configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
     _ autoclosure_rootBuilder: @autoclosure @escaping Deferred<Root>
 ) -> Flow {
     SetWindowRootFlow(
-        in: window,
+        in: windowBuilder(),
         configuration: configuration,
         autoclosure_rootBuilder
     )

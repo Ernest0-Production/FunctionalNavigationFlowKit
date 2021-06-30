@@ -9,12 +9,14 @@ import UIKit
 
 
 public func SetTabBarItemsFlow<TabBar, Item>(
-    in tabBarController: TabBar,
+    in tabBarControllerBuilder: @escaping @autoclosure () -> TabBar,
     animated: Bool = true,
     configuration: SetTabBarItemsFlowTransitionConfiguration<TabBar, Item>  = .empty,
     items: [Item]
 ) -> Flow {
     onMainThread {
+        let tabBarController = tabBarControllerBuilder()
+        
         configuration.prepareHandler?(tabBarController, items)
 
         tabBarController.setViewControllers(
@@ -27,14 +29,14 @@ public func SetTabBarItemsFlow<TabBar, Item>(
 }
 
 public func SetTabBarItemsFlow<TabBar, Item>(
-    in tabBarController: TabBar,
+    in tabBarControllerBuilder: @escaping @autoclosure () -> TabBar,
     animated: Bool = true,
     configuration: SetTabBarItemsFlowTransitionConfiguration<TabBar, Item> = .empty,
     items itemBuilders: [Deferred<Item>]
 ) -> Flow {
     return {
         SetTabBarItemsFlow(
-            in: tabBarController,
+            in: tabBarControllerBuilder(),
             animated: animated,
             configuration: configuration,
             items: itemBuilders.map({ $0() })

@@ -10,11 +10,11 @@ import UIKit
 
 public func DismissFlow(
     animated: Bool = true,
-    _ controller: UIViewController,
+    _ controllerBuilder: @escaping @autoclosure Deferred<UIViewController>,
     completionFlow: Flow? = nil
 ) -> Flow {
     onMainThread {
-        controller.dismiss(
+        controllerBuilder().dismiss(
             animated: animated,
             completion: completionFlow
         )
@@ -23,10 +23,12 @@ public func DismissFlow(
 
 public func DismissFlow(
     animated: Bool = true,
-    in presentingController: UIViewController,
+    in presentingControllerBuilder: @escaping @autoclosure Deferred<UIViewController>,
     completionFlow:Flow? = nil
 ) -> Flow {
     return {
+        let presentingController = presentingControllerBuilder()
+        
         guard let presentedController = presentingController.presentedViewController else {
             assertionFailure("\(presentingController) has not any presented View Controller ")
             return

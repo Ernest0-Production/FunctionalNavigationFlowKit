@@ -9,12 +9,13 @@ import UIKit
 
 
 public func PushFlow<NavigationStack, Item>(
-    in navigationController: NavigationStack,
+    in navigationControllerBuilder: @escaping @autoclosure () -> NavigationStack,
     animated: Bool = true,
     configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
     _ itemBuilder: @escaping Deferred<Item>
 ) -> Flow {
     onMainThread {
+        let navigationController = navigationControllerBuilder()
         let presentingController = itemBuilder()
 
         configuration.prepareHandler?(navigationController, presentingController)
@@ -29,13 +30,13 @@ public func PushFlow<NavigationStack, Item>(
 }
 
 public func PushFlow<NavigationStack, Item>(
-    in navigationController: NavigationStack,
+    in navigationControllerBuilder: @escaping @autoclosure () -> NavigationStack,
     animated: Bool = true,
     configuration: PushFlowTransitionConfiguration<NavigationStack, Item> = .empty,
     _ autoclosure_itemBuilder: @autoclosure @escaping Deferred<Item>
 ) -> Flow {
     PushFlow(
-        in: navigationController,
+        in: navigationControllerBuilder(),
         animated: animated,
         configuration: configuration,
         autoclosure_itemBuilder

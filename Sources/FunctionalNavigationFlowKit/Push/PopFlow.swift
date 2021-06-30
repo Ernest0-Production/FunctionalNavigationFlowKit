@@ -25,11 +25,11 @@ public func PopFlow<NavigationStack, Item>(
     in navigationController: NavigationStack,
     animated: Bool = true,
     configuration: PopFlowTransitionConfiguration<NavigationStack, Item> = .empty,
-    to viewController: Item
+    to viewControllerBuilder: @escaping @autoclosure Deferred<Item>
 ) -> Flow {
     onMainThread {
         navigationController.popToViewController(
-            viewController,
+            viewControllerBuilder(),
             animated: animated
         )
     }

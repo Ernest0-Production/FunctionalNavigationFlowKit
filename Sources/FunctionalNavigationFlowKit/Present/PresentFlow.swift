@@ -9,15 +9,16 @@ import UIKit
 
 
 public func PresentFlow<Presenting, Presented>(
-    in presenting: Presenting,
+    in presentingBuilder: @escaping @autoclosure Deferred<Presenting>,
     animated: Bool = true,
     configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
-    _ presentingBuilder: @escaping Deferred<Presented>,
+    _ presentedBuilder: @escaping Deferred<Presented>,
     completionFlow: Flow? = nil
 ) -> Flow {
     onMainThread {
-        let presented = presentingBuilder()
-
+        let presenting = presentingBuilder()
+        let presented = presentedBuilder()
+        
         configuration.prepareHandler?(presenting, presented)
 
         presenting.present(
@@ -31,14 +32,14 @@ public func PresentFlow<Presenting, Presented>(
 }
 
 public func PresentFlow<Presenting, Presented>(
-    in presenting: Presenting,
+    in presentingBuilder: @escaping @autoclosure Deferred<Presenting>,
     animated: Bool = true,
     configuration: PresentFlowTransitionConfiguration<Presenting, Presented> = .empty,
     _ autoclosure_presentedBuilder: @autoclosure @escaping Deferred<Presented>,
     completionFlow: Flow? = nil
 ) -> Flow {
     PresentFlow(
-        in: presenting,
+        in: presentingBuilder(),
         animated: animated,
         configuration: configuration,
         autoclosure_presentedBuilder,
