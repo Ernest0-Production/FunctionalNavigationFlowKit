@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "FunctionalNavigationFlowKit"
-  spec.version      = "0.0.3"
+  spec.version      = "0.0.4"
   spec.summary      = "Functional way of declarative description of UI navigation."
   spec.homepage     = "https://github.com/Ernest0-Production/FunctionalNavigationFlowKit"
   spec.license      = { :type => "MIT", :file => "LICENSE" }

@@ -8,22 +8,36 @@
 import UIKit
 
 
-public func DismissFlow(
+public typealias DismissFlowTransitionConfiguration = PresentFlowTransitionConfiguration
+
+public func DismissFlow<Presented>(
     animated: Bool = true,
-    _ controllerBuilder: @escaping @autoclosure Deferred<UIViewController>,
+    configuration: DismissFlowTransitionConfiguration<UIViewController, Presented> = .empty,
+    _ controllerBuilder: @escaping @autoclosure Deferred<Presented>,
     completionFlow: Flow? = nil
 ) -> Flow {
     onMainThread {
-        controllerBuilder().dismiss(
+        let presentedController = controllerBuilder()
+        
+        guard let presentingController = presentedController.presentingViewController else {
+            assertionFailure("\(presentedController) has not presenting View Controller")
+            return
+        }
+        
+        dismiss(
+            in: presentingController,
+            presentedController,
             animated: animated,
-            completion: completionFlow
+            configuration: configuration,
+            completionFlow: completionFlow
         )
     }
 }
 
-public func DismissFlow(
+public func DismissFlow<Presenting>(
     animated: Bool = true,
-    in presentingControllerBuilder: @escaping @autoclosure Deferred<UIViewController>,
+    configuration: DismissFlowTransitionConfiguration<Presenting, UIViewController> = .empty,
+    in presentingControllerBuilder: @escaping @autoclosure Deferred<Presenting>,
     completionFlow:Flow? = nil
 ) -> Flow {
     return {
@@ -34,16 +48,19 @@ public func DismissFlow(
             return
         }
 
-        DismissFlow(
-            animated: animated,
+        dismiss(
+            in: presentingController,
             presentedController,
+            animated: animated,
+            configuration: configuration,
             completionFlow: completionFlow
-        )()
+        )
     }
 }
 
 public func DismissFlow(
     animated: Bool = true,
+    configuration: DismissFlowTransitionConfiguration<UIViewController, UIViewController> = .empty,
     in window: UIWindow = KeyWindow,
     completionFlow: Flow? = nil
 ) -> Flow {
@@ -55,8 +72,26 @@ public func DismissFlow(
 
         DismissFlow(
             animated: animated,
+            configuration: configuration,
             topmostViewController,
             completionFlow: completionFlow
         )()
     }
+}
+
+private func dismiss<Presenting: UIViewController, Presented: UIViewController>(
+    in presentingController: Presenting,
+    _ presentedController: Presented,
+    animated: Bool,
+    configuration: DismissFlowTransitionConfiguration<Presenting, Presented>,
+    completionFlow: Flow?
+) {
+    configuration.prepareHandler?(presentingController, presentedController)
+    
+    presentedController.dismiss(
+        animated: animated,
+        completion: completionFlow
+    )
+    
+    configuration.completionHandler?(presentingController, presentedController)
 }
