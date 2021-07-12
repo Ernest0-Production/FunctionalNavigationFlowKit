@@ -38,7 +38,7 @@ public func DismissFlow<Presenting>(
     animated: Bool = true,
     configuration: DismissFlowTransitionConfiguration<Presenting, UIViewController> = .empty,
     in presentingControllerBuilder: @escaping @autoclosure Deferred<Presenting>,
-    completionFlow:Flow? = nil
+    completionFlow: Flow? = nil
 ) -> Flow {
     return {
         let presentingController = presentingControllerBuilder()
@@ -56,6 +56,35 @@ public func DismissFlow<Presenting>(
             completionFlow: completionFlow
         )
     }
+}
+
+public func DismissFlow<Presenting>(
+    animated: Bool = true,
+    configuration: DismissFlowTransitionConfiguration<Presenting, UIViewController> = .empty,
+    to presentingControllerBuilder: @escaping @autoclosure Deferred<Presenting>,
+    completionFlow: Flow? = nil
+) -> Flow {
+    LazyFlow({
+        let presentingController = presentingControllerBuilder()
+        
+        return DismissFlow(
+            animated: animated,
+            configuration: configuration,
+            in: presentingController,
+            completionFlow: LazyFlow({
+                if presentingController.presentedViewController == nil {
+                    return completionFlow ?? EmptyFlow
+                }
+                
+                return DismissFlow(
+                    animated: animated,
+                    configuration: configuration,
+                    in: presentingController,
+                    completionFlow: completionFlow
+                )
+            })
+        )
+    })
 }
 
 public func DismissFlow(
