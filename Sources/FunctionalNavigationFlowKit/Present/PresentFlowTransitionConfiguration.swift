@@ -33,6 +33,12 @@ public extension PresentFlowTransitionConfiguration {
             presented.isModalInPresentation = true
         })
     }
+    
+    static var inParentContext: PresentFlowTransitionConfiguration {
+        PresentFlowTransitionConfiguration(prepare: { presenting, _ in
+            presenting.definesPresentationContext = true
+        })
+    }
 
     static func transitionDelegate(_ transitionDelegate: UIViewControllerTransitioningDelegate) -> PresentFlowTransitionConfiguration {
         var currentDelegate: UIViewControllerTransitioningDelegate?
