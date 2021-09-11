@@ -29,5 +29,5 @@ public func RecursiveFlow(
 ) ->  Flow {
     var void: Void { () }
     
-    return RecursiveFlow({ (_: Void, rectursiveFuntion) in rectursiveFuntion(void) })(void)
+    return RecursiveFlow({ (_: Void, rectursiveFuntion) in function({ rectursiveFuntion(void) }) })(void)
 }
