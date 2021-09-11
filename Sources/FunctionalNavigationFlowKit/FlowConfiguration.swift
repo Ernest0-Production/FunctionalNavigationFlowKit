@@ -19,8 +19,8 @@ public final class FlowConfiguration<Departure, Destination> {
         self.completionHandler = completion
     }
 
-    let prepareHandler: Handler?
-    let completionHandler: Handler?
+    public let prepareHandler: Handler?
+    public let completionHandler: Handler?
 }
 
 
