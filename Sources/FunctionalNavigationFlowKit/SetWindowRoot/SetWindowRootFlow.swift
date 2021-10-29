@@ -8,7 +8,6 @@
 import UIKit
 
 
-
 public func SetWindowRootFlow<Window, Root>(
     in windowBuilder: @escaping @autoclosure () -> Window,
     configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
