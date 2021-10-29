@@ -1,10 +1,9 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 
 import PackageDescription
 
 let package = Package(
     name: "FunctionalNavigationFlowKit",
-    platforms: [.iOS(.v9)],
     products: [
         .library(
             name: "FunctionalNavigationFlowKit",
