@@ -8,119 +8,84 @@
 import UIKit
 
 
-public typealias DismissFlowTransitionConfiguration = PresentFlowTransitionConfiguration
+public typealias DismissFlowConfiguration = PresentFlowConfiguration
+
 
 public func DismissFlow<Presented>(
     animated: Bool = true,
-    configuration: DismissFlowTransitionConfiguration<UIViewController, Presented> = .empty,
+    with configuration: DismissFlowConfiguration<UIViewController, Presented> = .empty,
     _ controllerBuilder: @escaping @autoclosure Deferred<Presented>,
-    completionFlow: Flow? = nil
+    completionFlow: @escaping Flow = EmptyFlow
 ) -> Flow {
     onMainThread {
         let presentedController = controllerBuilder()
-        
+
         guard let presentingController = presentedController.presentingViewController else {
             assertionFailure("\(presentedController) has not presenting View Controller")
             return
         }
-        
-        dismiss(
-            in: presentingController,
-            presentedController,
+
+        configuration.preparationHandler?(presentingController, presentedController)
+
+        presentedController.dismiss(
             animated: animated,
-            configuration: configuration,
-            completionFlow: completionFlow
+            completion: completionFlow
         )
+
+        configuration.completionHandler?(presentingController, presentedController)
     }
 }
 
 public func DismissFlow<Presenting>(
     animated: Bool = true,
-    configuration: DismissFlowTransitionConfiguration<Presenting, UIViewController> = .empty,
+    with configuration: DismissFlowConfiguration<Presenting, UIViewController> = .empty,
     in presentingControllerBuilder: @escaping @autoclosure Deferred<Presenting>,
-    completionFlow: Flow? = nil
+    completionFlow: @escaping Flow = EmptyFlow
 ) -> Flow {
-    return {
+    onMainThread {
         let presentingController = presentingControllerBuilder()
-        
+
         guard let presentedController = presentingController.presentedViewController else {
             assertionFailure("\(presentingController) has not any presented View Controller ")
             return
         }
 
-        dismiss(
-            in: presentingController,
-            presentedController,
+        configuration.preparationHandler?(presentingController, presentedController)
+
+        presentedController.dismiss(
             animated: animated,
-            configuration: configuration,
-            completionFlow: completionFlow
+            completion: completionFlow
         )
+
+        configuration.completionHandler?(presentingController, presentedController)
     }
 }
 
 public func DismissFlow<Presenting>(
     animated: Bool = true,
-    configuration: DismissFlowTransitionConfiguration<Presenting, UIViewController> = .empty,
+    with configuration: DismissFlowConfiguration<Presenting, UIViewController> = .empty,
     to presentingControllerBuilder: @escaping @autoclosure Deferred<Presenting>,
-    completionFlow: Flow? = nil
+    completionFlow: @escaping Flow = EmptyFlow
 ) -> Flow {
-    LazyFlow({
+    LazyFlow(onMainThread {
         let presentingController = presentingControllerBuilder()
-        
+
         return DismissFlow(
             animated: animated,
-            configuration: configuration,
+            with: configuration,
             in: presentingController,
             completionFlow: LazyFlow({
                 if presentingController.presentedViewController == nil {
-                    return completionFlow ?? EmptyFlow
+                    return completionFlow
                 }
-                
+
                 return DismissFlow(
                     animated: animated,
-                    configuration: configuration,
+                    with: configuration,
                     in: presentingController,
                     completionFlow: completionFlow
                 )
             })
         )
     })
-}
-
-public func DismissFlow(
-    animated: Bool = true,
-    configuration: DismissFlowTransitionConfiguration<UIViewController, UIViewController> = .empty,
-    in window: UIWindow = KeyWindow,
-    completionFlow: Flow? = nil
-) -> Flow {
-    return {
-        guard let topmostViewController = window.rootViewController?.topmostViewController() else {
-            assertionFailure("\(window) has not rootViewController")
-            return
-        }
-
-        DismissFlow(
-            animated: animated,
-            configuration: configuration,
-            topmostViewController,
-            completionFlow: completionFlow
-        )()
-    }
-}
-
-private func dismiss<Presenting: UIViewController, Presented: UIViewController>(
-    in presentingController: Presenting,
-    _ presentedController: Presented,
-    animated: Bool,
-    configuration: DismissFlowTransitionConfiguration<Presenting, Presented>,
-    completionFlow: Flow?
-) {
-    configuration.prepareHandler?(presentingController, presentedController)
-    
-    presentedController.dismiss(
-        animated: animated,
-        completion: completionFlow
-    )
-    
-    configuration.completionHandler?(presentingController, presentedController)
 }

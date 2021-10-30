@@ -8,12 +8,12 @@
 import Foundation
 
 
-func onMainThread(_ flow: @escaping Flow) -> Flow {
+func onMainThread<Result>(_ execute: @escaping Deferred<Result>) -> Deferred<Result> {
     return {
         guard !Thread.isMainThread else {
-            return flow()
+            return execute()
         }
 
-        return DispatchQueue.main.sync(execute: flow)
+        return DispatchQueue.main.sync(execute: execute)
     }
 }

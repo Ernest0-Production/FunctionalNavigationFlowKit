@@ -11,35 +11,31 @@ import UIKit
 public final class FlowConfiguration<Departure, Destination> {
     public typealias Handler = (_ departure: Departure, _ destination: Destination) -> Void
 
-    public init(
-        prepare: Handler? = nil,
-        completion: Handler? = nil
-    ) {
-        self.prepareHandler = prepare
+    public init(preparation: Handler?, completion: Handler?) {
+        self.preparationHandler = preparation
         self.completionHandler = completion
     }
 
-    public let prepareHandler: Handler?
+    public let preparationHandler: Handler?
     public let completionHandler: Handler?
 }
 
 
 public extension FlowConfiguration {
-    static var empty: FlowConfiguration { FlowConfiguration() }
+    static var empty: FlowConfiguration { FlowConfiguration(preparation: nil, completion: nil) }
 
-    static func prepare(_ handler: @escaping Handler) -> FlowConfiguration {
-        FlowConfiguration(prepare: handler)
+    static func preparation(_ handler: @escaping Handler) -> FlowConfiguration {
+        FlowConfiguration(preparation: handler, completion: nil)
     }
-
     static func completion(_ handler: @escaping Handler) -> FlowConfiguration {
-        FlowConfiguration(completion: handler)
+        FlowConfiguration(preparation: nil, completion: handler)
     }
 
     static func combine(_ configurations: [FlowConfiguration]) -> FlowConfiguration {
         FlowConfiguration(
-            prepare: { departure, destination in
+            preparation: { departure, destination in
                 for configuration in configurations {
-                    configuration.prepareHandler?(departure, destination)
+                    configuration.preparationHandler?(departure, destination)
                 }
             },
             completion:  { departure, destination in

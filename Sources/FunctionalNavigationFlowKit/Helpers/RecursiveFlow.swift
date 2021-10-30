@@ -25,7 +25,7 @@ public func RecursiveFlow<Arguments>(
 }
 
 public func RecursiveFlow(
-    _ function: @escaping (_ selfFunction: @escaping () -> Flow) -> Flow
+    _ function: @escaping (_ selfFunction: @escaping Deferred<Flow>) -> Flow
 ) ->  Flow {
     var void: Void { () }
     

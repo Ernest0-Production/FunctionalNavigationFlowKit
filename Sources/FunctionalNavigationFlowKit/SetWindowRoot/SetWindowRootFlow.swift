@@ -9,30 +9,18 @@ import UIKit
 
 
 public func SetWindowRootFlow<Window, Root>(
-    in windowBuilder: @escaping @autoclosure () -> Window,
-    configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
-    _ rootBuilder: @escaping Deferred<Root>
+    in windowBuilder: @escaping @autoclosure Deferred<Window>,
+    with configuration: SetWindowRootFlowConfiguration<Window, Root> = .empty,
+    _ rootBuilder: @autoclosure @escaping Deferred<Root>
 ) -> Flow {
     onMainThread {
         let window = windowBuilder()
         let root = rootBuilder()
 
-        configuration.prepareHandler?(window, root)
+        configuration.preparationHandler?(window, root)
 
         window.rootViewController = root
 
         configuration.completionHandler?(window, root)
     }
-}
-
-public func SetWindowRootFlow<Window, Root>(
-    in windowBuilder: @escaping @autoclosure () -> Window,
-    configuration: SetWindowRootFlowTransitionConfiguration<Window, Root> = .empty,
-    _ autoclosure_rootBuilder: @autoclosure @escaping Deferred<Root>
-) -> Flow {
-    SetWindowRootFlow(
-        in: windowBuilder(),
-        configuration: configuration,
-        autoclosure_rootBuilder
-    )
 }

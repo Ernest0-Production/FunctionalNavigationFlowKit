@@ -196,9 +196,9 @@ func PushReplacingFlow(
 
 
 ## ⚙️ Конфигурация `Flow`
-Каждый `Flow` имеет конфигурацию [`FlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/FlowConfiguration.swift), которая запускается **перед** и **после** выполнения.
+Каждый `Flow` имеет конфигурацию [`FlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/FlowConfiguration.swift), которая запускается **перед** и **после** выполнения.
 ```swift
-let configuration = FlowTransitionConfiguration<UINavigationController, UIViewController>(
+let configuration = FlowConfiguration<UINavigationController, UIViewController>(
     prepare: { navigationController, viewController in  
         navigationController.setNavigationBarHidden(true, animated: false)
     },
@@ -216,22 +216,22 @@ return PushFlow(
 
 Фреймфорк уже предоставляет базовый набор конфигураций:
 ---
- [`PushFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PushFlowTransitionConfiguration.swift) == `FlowTransitionConfiguration<UINavigationController, UIViewController>`
+ [`PushFlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PushFlowConfiguration.swift) == `FlowConfiguration<UINavigationController, UIViewController>`
 - `hidesBottomBarWhenPushed`
 - `title(String?)`
 - `titleView(UIView?)`
 - `navigationDelegate(UINavigationControllerDelegate)`
 ---
-[`PresentFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Present/PresentFlowTransitionConfiguration.swift) == `FlowTransitionConfiguration<UIViewController, UIViewController>`
+[`PresentFlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Present/PresentFlowConfiguration.swift) == `FlowConfiguration<UIViewController, UIViewController>`
 - `transitionStyle(UIModalTransitionStyle)`
 - `presentationStyle(UIModalPresentationStyle)`
 - `modalInPresentation`
 - `transitionDelegate(UIViewControllerTransitioningDelegate)`
 ---
-[`SetTabBarItemsFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetTabBarItems/SetTabBarItemsFlowTransitionConfiguration.swift) == `FlowTransitionConfiguration<UITabBarController, UIViewController>`
+[`SetTabBarItemsFlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetTabBarItems/SetTabBarItemsFlowConfiguration.swift) == `FlowConfiguration<UITabBarController, UIViewController>`
 - `titlePositionAdjustment(UIOffset)`
 ---
-[`SetWindowRootFlowTransitionConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetWindowRoot/SetWindowRootFlowTransitionConfiguration.swift)== `FlowTransitionConfiguration<UIWindow, UIViewController>`
+[`SetWindowRootFlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetWindowRoot/SetWindowRootFlowConfiguration.swift)== `FlowConfiguration<UIWindow, UIViewController>`
 - `keyAndVisible`
 - `animated(duration: TimeInterval, completion: Flow?)`
 ---
