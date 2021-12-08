@@ -7,13 +7,13 @@
 
 /// An object that manages the execution of tasks serially.
 public final class FlowTaskQueue {
-    private var taskTable = TaskTable()
-    private let synchronizer: Synchronizer
+    private lazy var taskTable = TaskTable()
+    private let synchronizer: FlowSynchronizer
 
     /// Creates a new task queue to which you can submit tasks.
     ///
     /// - Parameter synchronizer: A way to organize thread safety of serial execution.
-    public init(synchronizer: Synchronizer = .default) {
+    public init(synchronizer: FlowSynchronizer) {
         self.synchronizer = synchronizer
     }
 
@@ -21,7 +21,7 @@ public final class FlowTaskQueue {
     /// 
     /// - Parameter task: The task which must be executed after the completion of the last task in the queue (at the time of the function call). If the queue is empty, the task will start executing immediately.
     public func execute(_ task: FlowTask) {
-        synchronizer.sync { [self] in
+        synchronizer.sync({ [self] in
             guard taskTable.isEmpty else {
                 taskTable.append(task)
                 return
@@ -29,22 +29,22 @@ public final class FlowTaskQueue {
 
             let firstTaskKey = taskTable.append(task)
             executeTaskQueue(from: firstTaskKey)
-        }
+        })
     }
 
     /// Cancels execution of all pending tasks. After clear, the next/new task will be performed immediately.
     public func clear() {
-        synchronizer.sync { [self] in
+        synchronizer.sync({ [self] in
             taskTable.remoteAll()
-        }
+        })
     }
 
     private func executeTaskQueue(from key: TaskTable.Key) {
         taskTable.task(for: key)?.execute(onComplete: { [self] in
-            synchronizer.sync {
+            synchronizer.sync({
                 taskTable.remove(for: key)
                 executeTaskQueue(from: key + 1)
-            }
+            })
         })
     }
 }

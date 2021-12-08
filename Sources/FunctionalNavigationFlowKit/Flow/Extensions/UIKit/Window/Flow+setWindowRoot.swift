@@ -33,7 +33,7 @@ public extension Flow {
             window.rootViewController = root
 
             configuration.completionHandler?(window, root)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 }
 #endif

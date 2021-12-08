@@ -25,7 +25,7 @@ public extension SetWindowRootFlowConfiguration {
     static func animated(
         duration: TimeInterval,
         options: UIView.AnimationOptions = .transitionCrossDissolve,
-        completionFlow: @escaping (Bool) -> Flow = { _ in Flow.empty }
+        completion: Optional<() -> Void> = .none
     ) -> SetWindowRootFlowConfiguration {
         SetWindowRootFlowConfiguration.completion({ window, _ in
             UIView.transition(
@@ -33,7 +33,7 @@ public extension SetWindowRootFlowConfiguration {
                 duration: duration,
                 options: options,
                 animations: nil,
-                completion: { result in completionFlow(result).execute() }
+                completion: { result in completion?() }
             )
         })
     }

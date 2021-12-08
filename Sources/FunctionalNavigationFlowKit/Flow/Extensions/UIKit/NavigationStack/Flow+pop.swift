@@ -39,7 +39,7 @@ public extension Flow {
             navigationStack.popViewController(animated: animated)
 
             configuration.completionHandler?(navigationStack, currentItem)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 
     /// Pops view controllers from the specified view controller is at the top of the navigation stack.
@@ -70,7 +70,7 @@ public extension Flow {
             navigationStack.setViewControllers(Array(newStack), animated: animated)
 
             configuration.completionHandler?(navigationStack, item)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 
     /// Pops view controllers until the specified view controller is at the top of the navigation stack.
@@ -97,7 +97,7 @@ public extension Flow {
             navigationStack.popToViewController(item, animated: animated)
 
             configuration.completionHandler?(navigationStack, item)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 
     /// Pops all the view controllers on the stack except the root view controller and updates the display.
@@ -123,7 +123,7 @@ public extension Flow {
             navigationStack.popToRootViewController(animated: animated)
 
             configuration.completionHandler?(navigationStack, rootItem)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 }
 #endif

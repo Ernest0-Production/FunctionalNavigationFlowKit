@@ -68,6 +68,68 @@ final class FunctionalNavigationFlowKitTests: XCTestCase {
         XCTAssertEqual(steps, [0, 1, 2, 3])
     }
 
+    func test_taskOnceCompletion() {
+        var counter = 0
+        var exceptionsCount = 0
+
+        ExceptionsHandler = { _,_,_ in
+            exceptionsCount += 1
+        }
+
+        FlowTask.create({ completionHandler in
+            completionHandler()
+            completionHandler()
+            completionHandler()
+            return Flow.empty
+        }).execute(onComplete: {
+            counter += 1
+        })
+
+        XCTAssertEqual(counter, 1)
+        XCTAssertEqual(exceptionsCount, 2)
+    }
+
+    func test_taskOnceExecution() {
+        var counter = 0
+        let task = FlowTask
+            .just(.just(counter += 1))
+            .once()
+
+        XCTAssertEqual(counter, 0)
+
+        task.execute(onComplete: {})
+        task.execute(onComplete: {})
+        task.execute(onComplete: {})
+
+        XCTAssertEqual(counter, 1)
+    }
+
+    func test_taskSharedExecution() {
+        var counter = 0
+        var completionHandler: FlowTask.CompletionHandler = {}
+
+        let task = FlowTask.create({
+            completionHandler = $0
+            counter += 1
+            return Flow.empty
+        }).shared()
+
+        XCTAssertEqual(counter, 0)
+
+        task.execute(onComplete: {})
+        XCTAssertEqual(counter, 1)
+
+        task.execute(onComplete: {})
+        XCTAssertEqual(counter, 1)
+
+        completionHandler()
+        task.execute(onComplete: {})
+        XCTAssertEqual(counter, 2)
+
+        task.execute(onComplete: {})
+        XCTAssertEqual(counter, 2)
+    }
+
     func test_zipTask() {
         var steps: [Int] = []
         var completeAsyncTask: () -> Void = {}

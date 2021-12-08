@@ -21,7 +21,7 @@ public extension Flow {
     ///
     ///   - presentedFactory: View controller to be preesnted.
     ///
-    ///   - completionFlow: The flow to execute after the presentation finishes.
+    ///   - completion: The flow to execute after the presentation finishes.
     ///
     /// - Returns: Flow that present view controller.
     static func present<Presenting, Presented>(
@@ -29,7 +29,7 @@ public extension Flow {
         animated: Bool = true,
         with configuration: PresentFlowConfiguration<Presenting, Presented> = .empty,
         _ presentedFactory: @escaping @autoclosure Deferred<Presented>,
-        completionFlow: Flow = .empty
+        completion: Optional<() -> Void> = .none
     ) -> Flow {
         Flow({
             let presented = presentedFactory()
@@ -39,11 +39,11 @@ public extension Flow {
             presenting.present(
                 presented,
                 animated: animated,
-                completion: completionFlow.execute
+                completion: completion
             )
 
             configuration.completionHandler?(presenting, presented)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 }
 #endif

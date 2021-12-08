@@ -42,14 +42,8 @@ public extension FlowTask {
             var counter = tasks.count
 
             for task in tasks {
-                task.execute(onComplete: {
-                    lock.lock(); defer { lock.unlock() }
-                    counter -= 1
-
-                    if counter == 0 {
-                        completion()
-                    }
-                })
+                task.synchonizeCompletion(with: .lock(lock))
+                    .execute(onComplete: { counter -= 1; if counter == Int.zero { completion() } })
             }
 
             return Flow.empty

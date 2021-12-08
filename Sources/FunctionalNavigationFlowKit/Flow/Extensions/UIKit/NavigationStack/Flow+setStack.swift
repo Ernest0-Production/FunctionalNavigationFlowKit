@@ -40,7 +40,34 @@ public extension Flow {
             navigationStack.setViewControllers(items, animated: animated)
             
             configuration.completionHandler?(navigationStack, items)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
+    }
+
+    /// Remove all view controllers currently managed by the navigation controller with the new root item.
+    ///
+    /// - Parameters:
+    ///   - animated: If true, animate the pushing or popping of the top view controller. If false, replace the view controllers without any animations.
+    ///
+    ///   - configuration: Flow configuration that executed before and after setting.
+    ///
+    ///   - itemFactory: The view controller to place in the stack.
+    ///
+    /// - Returns: Flow that clear navigation stack and set root view controller.
+    static func setStackRoot<NavigationStack, Item>(
+        in navigationStack: NavigationStack,
+        animated: Bool = true,
+        with configuration: PushFlowConfiguration<NavigationStack, Item> = .empty,
+        _ itemFactory: @autoclosure @escaping Deferred<Item>
+    ) -> Flow {
+        Flow({
+            let item = itemFactory()
+
+            configuration.preparationHandler?(navigationStack, item)
+
+            navigationStack.setViewControllers([item], animated: animated)
+
+            configuration.completionHandler?(navigationStack, item)
+        }).synchonize(with: .mainThread)
     }
 }
 #endif

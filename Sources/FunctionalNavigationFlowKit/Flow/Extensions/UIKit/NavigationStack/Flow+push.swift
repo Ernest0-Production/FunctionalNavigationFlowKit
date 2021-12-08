@@ -36,7 +36,7 @@ public extension Flow {
             navigationStack.pushViewController(item, animated: animated)
 
             configuration.completionHandler?(navigationStack, item)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 
     /// Pop top view controller and pushes new view controller onto the navigation stack and updates the display.
@@ -69,7 +69,7 @@ public extension Flow {
             navigationStack.setViewControllers(stackItems, animated: animated)
 
             configuration.completionHandler?(navigationStack, item)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 }
 #endif

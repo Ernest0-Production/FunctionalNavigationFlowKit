@@ -9,13 +9,19 @@ import Combine
 
 
 public extension FlowTask {
-    @available(macOS 10.15, iOS 13.0, *)
     /// Publisher representation of task.
+    ///
+    /// - Start execution on sink/subscribe.
+    /// - Subscription cancelling does not cancel execution.
+    @available(macOS 10.15, iOS 13.0, *)
     var publisher: FlowTaskPublisher {
         FlowTaskPublisher(task: self)
     }
 }
 
+/// Publisher representation of flow task.
+///
+///  Produces a single output and then finishes.
 @available(macOS 10.15, iOS 13.0, *)
 public struct FlowTaskPublisher: Publisher {
     public typealias Output = Void
@@ -33,15 +39,5 @@ public struct FlowTaskPublisher: Publisher {
             _ = subscriber.receive(())
             subscriber.receive(completion: .finished)
         })
-    }
-}
-
-@available(macOS 10.15, iOS 13.0, *)
-public extension FlowTaskPublisher {
-    func sink(receiveCompletion completionHandler: @escaping FlowTask.CompletionHandler) {
-        subscribe(Subscribers.Sink(
-            receiveCompletion: { _ in },
-            receiveValue: completionHandler
-        ))
     }
 }

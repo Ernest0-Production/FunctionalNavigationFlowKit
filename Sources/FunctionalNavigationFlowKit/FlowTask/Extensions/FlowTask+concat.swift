@@ -14,19 +14,4 @@ public extension FlowTask {
     static func concat<TaskSequence: Sequence>(_ tasks: TaskSequence) -> FlowTask where TaskSequence.Element == FlowTask {
         tasks.reduce(FlowTask.empty, { $0.then($1) })
     }
-
-    /// Performs task serially on task queue.
-    ///
-    /// - Parameter queue: Task queue on which flow task should be executed.
-    ///
-    /// - Returns: Task that execute flow task on task queue.
-    func concat(on queue: FlowTaskQueue) -> FlowTask {
-        FlowTask.create({ [self] completion in
-            queue.execute(
-                sideEffect(onComplete: completion)
-            )
-
-            return Flow.empty
-        })
-    }
 }

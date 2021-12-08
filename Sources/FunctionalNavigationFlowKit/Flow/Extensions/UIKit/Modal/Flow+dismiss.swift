@@ -20,18 +20,18 @@ public extension Flow {
     ///
     ///   - presented: View controller to be dismissed.
     ///
-    ///   - completionFlow: The flow to execute after the view controller is dismissed.
+    ///   - completion: The flow to execute after the view controller is dismissed.
     ///
     /// - Returns: Flow that dismiss view controller.
     static func dismiss<Presented>(
         animated: Bool = true,
         with configuration: DismissFlowConfiguration<UIViewController, Presented> = .empty,
         _ presented: Presented,
-        completionFlow: Flow = .empty
+        completion: Optional<() -> Void> = .none
     ) -> Flow {
         Flow({
             guard let presenting = presented.presentingViewController else {
-                assertionFailure("\(presented) has not presenting View Controller")
+                throwException("\(presented) has not presenting View Controller")
                 return
             }
 
@@ -39,11 +39,11 @@ public extension Flow {
 
             presented.dismiss(
                 animated: animated,
-                completion: completionFlow.execute
+                completion: completion
             )
 
             configuration.completionHandler?(presenting, presented)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 
     /// Dismisses the view controller that was presented modally by the presenting view controller..
@@ -55,18 +55,18 @@ public extension Flow {
     ///
     ///   - presenting: View controller in which the presented view controller to be dismissed.
     ///
-    ///   - completionFlow: The flow to execute after the view controller is dismissed.
+    ///   - completion: The flow to execute after the view controller is dismissed.
     ///
     /// - Returns: Flow that dismiss view controller.
     static func dismiss<Presenting>(
         animated: Bool = true,
         with configuration: DismissFlowConfiguration<Presenting, UIViewController> = .empty,
         in presenting: Presenting,
-        completionFlow: Flow = .empty
+        completion: Optional<() -> Void> = .none
     ) -> Flow {
         Flow({
             guard let presented = presenting.presentedViewController else {
-                assertionFailure("\(presenting) has not any presented View Controller ")
+                throwException("\(presenting) has not any presented View Controller ")
                 return
             }
 
@@ -74,11 +74,11 @@ public extension Flow {
 
             presented.dismiss(
                 animated: animated,
-                completion: completionFlow.execute
+                completion: completion
             )
 
             configuration.completionHandler?(presenting, presented)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 
     /// Dismisses **all** view controllers that was presented modally by the presenting view controller..
@@ -90,31 +90,32 @@ public extension Flow {
     ///
     ///   - presenting: View controller in which the **all** presented view controller to be dismissed.
     ///
-    ///   - completionFlow: The flow to execute after the view controller is dismissed.
+    ///   - completion: The flow to execute after the view controller is dismissed.
     ///
     /// - Returns: Flow that dismiss view controller.
     static func dismiss<Presenting>(
         animated: Bool = true,
         with configuration: DismissFlowConfiguration<Presenting, UIViewController> = .empty,
         to presenting: Presenting,
-        completionFlow: Flow = .empty
+        completion: Optional<() -> Void> = .none
     ) -> Flow {
         Flow.dismiss(
             animated: animated,
             with: configuration,
             in: presenting,
-            completionFlow: Flow.deferred({
+            completion: {
                 if presenting.presentedViewController == nil {
-                    return completionFlow
+                    completion?()
+                    return
                 }
 
-                return Flow.dismiss(
+                Flow.dismiss(
                     animated: animated,
                     with: configuration,
                     in: presenting,
-                    completionFlow: completionFlow
-                )
-            })
+                    completion: completion
+                ).execute()
+            }
         )
     }
 }

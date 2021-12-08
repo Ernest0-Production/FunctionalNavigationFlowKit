@@ -36,7 +36,7 @@ public extension Flow {
             tabBar.setViewControllers(tabs, animated: animated)
             
             configuration.completionHandler?(tabBar, tabs)
-        }).onMainThread()
+        }).synchonize(with: .mainThread)
     }
 }
 #endif

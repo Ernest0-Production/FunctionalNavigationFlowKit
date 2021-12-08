@@ -11,6 +11,6 @@ import Foundation
 public extension FlowTaskQueue {
     /// Shared flow queue that execute tasks on main dispatch queue.
     static let main = FlowTaskQueue(
-        synchronizer: Synchronizer.dispatchQueue(DispatchQueue.main)
+        synchronizer: FlowSynchronizer.mainThread
     )
 }
