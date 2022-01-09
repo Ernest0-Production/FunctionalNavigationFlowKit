@@ -15,13 +15,13 @@ public extension Flow {
     ///
     /// - Returns: Flow that incapsulate side effects while executing this flow.
     func sideEffect(
-        beforeStart: @escaping () -> Void = {},
-        afterStart: @escaping () -> Void = {}
+        beforeStart: Optional<() -> Void> = .none,
+        afterStart: Optional<() -> Void> = .none
     ) -> Flow {
         Flow({ [self] in
-            beforeStart()
+            beforeStart?()
             execute()
-            afterStart()
+            afterStart?()
         })
     }
 }

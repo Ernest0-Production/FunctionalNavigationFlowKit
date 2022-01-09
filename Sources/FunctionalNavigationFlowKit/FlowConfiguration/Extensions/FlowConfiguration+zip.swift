@@ -12,17 +12,6 @@ public extension FlowConfiguration {
     ///
     /// - Returns: FlowConfiguration that will serially execute passed list of configuration.
     static func zip(_ configurations: [FlowConfiguration]) -> FlowConfiguration {
-        FlowConfiguration(
-            preparation: { departure, destination in
-                for configuration in configurations {
-                    configuration.preparationHandler?(departure, destination)
-                }
-            },
-            completion:  { departure, destination in
-                for configuration in configurations {
-                    configuration.completionHandler?(departure, destination)
-                }
-            }
-        )
+        configurations.reduce(FlowConfiguration.empty, { $0.appending($1) })
     }
 }

@@ -7,7 +7,7 @@
 
 public extension Flow {
     /// Wraps this flow into another.
-    func flatMap(_ transformation: (Flow) -> Flow) -> Flow {
+    func transform(_ transformation: (Flow) -> Flow) -> Flow {
         transformation(self)
     }
 }

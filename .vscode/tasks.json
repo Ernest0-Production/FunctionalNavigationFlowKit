@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "swift",
+			"selector": {
+				"kind": "target",
+				"name": "FunctionalNavigationFlowKit"
+			},
+			"directory": "/Users/ernest0n/Projects/FunctionalNavigationFlowKit",
+			"taskType": "build",
+			"problemMatcher": [],
+			"label": "swift: build target: FunctionalNavigationFlowKit",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"type": "swift",
+			"selector": {
+				"kind": "target",
+				"name": "FunctionalNavigationFlowKitTests"
+			},
+			"directory": "/Users/ernest0n/Projects/FunctionalNavigationFlowKit",
+			"taskType": "test",
+			"problemMatcher": [],
+			"label": "swift: test target: FunctionalNavigationFlowKitTests",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
+		}
+	]
+}

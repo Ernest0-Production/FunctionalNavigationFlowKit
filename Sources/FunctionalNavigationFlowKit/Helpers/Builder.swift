@@ -10,7 +10,7 @@
 /// - Parameter builder: Scope for initializing object and making some additional things on it before return result.
 ///
 /// - Returns: Resulting object.
-public func build<Object>(_ builder: Deferred<Object>) -> Object {
+public func build<Object>(_ builder: () -> Object) -> Object {
     builder()
 }
 
@@ -19,16 +19,16 @@ public func build<Object>(_ builder: Deferred<Object>) -> Object {
 /// - Parameter builder: Scope for initializing object and making some additional things on it before return result **and with ability to get result-future before returning**.
 ///
 /// - Returns: Resulting object.
-public func recursively<Object>(_ builder: (@escaping Deferred<Object>) -> Object) -> Object {
-    var promisedObject: AnyObject?
+public func buildWithPointer<Object>(_ builder: (@escaping () -> Object) -> Object) -> Object {
+    var pointer = Optional<AnyObject>.none
 
-    let promise: Deferred<Object> = { [weak promisedObject] in
-        assert(promisedObject != nil, "early access to uninitialized object")
-        return promisedObject as! Object
+    let pointerGetter: () -> Object = { [weak pointer] in
+        assert(pointer != nil, "early access to uninitialized object")
+        return pointer as! Object
     }
 
-    let object = builder(promise)
-    promisedObject = object as AnyObject
+    let object = builder(pointerGetter)
+    pointer =  object as Optional<AnyObject>
 
     return object
 }

@@ -28,7 +28,7 @@ public extension Flow {
         in presenting: Presenting,
         animated: Bool = true,
         with configuration: PresentFlowConfiguration<Presenting, Presented> = .empty,
-        _ presentedFactory: @escaping @autoclosure Deferred<Presented>,
+        _ presentedFactory: @escaping @autoclosure () -> Presented,
         completion: Optional<() -> Void> = .none
     ) -> Flow {
         Flow({

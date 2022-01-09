@@ -29,9 +29,7 @@ public extension Flow {
     ///
     /// - Returns: Flow that will serially execute passed list of flow.
     static func zip<FlowSequence: Sequence>(_ flows: FlowSequence) -> Flow where FlowSequence.Element == Flow {
-        Flow({
-            for flow in flows { flow.execute() }
-        })
+        flows.reduce(Flow.empty, { $0.then($1) })
     }
 
     /// Concatenates the passed flow after this flow.
@@ -44,7 +42,7 @@ public extension Flow {
     ///               animated: true,
     ///               SettingsListViewController(...)
     ///           )
-    ///           .zip(.setStack(
+    ///           .then(.setStack(
     ///               in: detailsNavigationController,
     ///               animated: false,
     ///               [ProfileSettingsViewController(...)]
@@ -53,7 +51,10 @@ public extension Flow {
     /// - Parameter flows: Ordered list of the flow that should be executed serially.
     ///
     /// - Returns: Flow that will serially execute this and passed flows.
-    func zip(_ flows: Flow...) -> Flow {
-        Flow.zip([self] + flows)
+    func then(_ nextFlow: Flow) -> Flow {
+        Flow({
+            self.execute()
+            nextFlow.execute()
+        })
     }
 }

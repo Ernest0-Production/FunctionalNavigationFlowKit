@@ -16,16 +16,16 @@ public extension FlowConfiguration {
     /// - Returns: FlowConfiguration that log preparation and completion of flow.
     func log(
         prefix: String? = nil,
-        to stream: TextOutputStream? = nil
+        to stream: TextOutputStream = FlowEnvironment.defaultLogTextOutputStream
     ) -> FlowConfiguration {
-        lazy var finalStream = stream.orDefault
+        lazy var finalStream = stream
 
         return FlowConfiguration(
             preparation: {
-                finalStream.write("\(logPrefix(with: prefix)) Preparation of flow \($0) ➡️ \($1)")
+                finalStream.write(message: "Preparation of flow \($0) ➡️ \($1)", withPrefix: prefix)
             },
             completion: {
-                finalStream.write("\(logPrefix(with: prefix)) Completion of flow \($0) ➡️ \($1)")
+                finalStream.write(message: "Completion of flow \($0) ➡️ \($1)", withPrefix: prefix)
             }
         )
     }

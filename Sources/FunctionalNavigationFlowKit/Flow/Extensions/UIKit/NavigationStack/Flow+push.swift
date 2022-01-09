@@ -26,7 +26,7 @@ public extension Flow {
         in navigationStack: NavigationStack,
         animated: Bool = true,
         with configuration: PushFlowConfiguration<NavigationStack, Item> = .empty,
-        _ itemFactory: @autoclosure @escaping Deferred<Item>
+        _ itemFactory: @autoclosure @escaping () -> Item
     ) -> Flow {
         Flow({
             let item = itemFactory()
@@ -55,7 +55,7 @@ public extension Flow {
         in navigationStack: NavigationStack,
         animated: Bool = true,
         with configuration: PushFlowConfiguration<NavigationStack, Item> = .empty,
-        _ itemFactory: @autoclosure @escaping Deferred<Item>
+        _ itemFactory: @autoclosure @escaping () -> Item
     ) -> Flow {
         Flow({
             let item = itemFactory()

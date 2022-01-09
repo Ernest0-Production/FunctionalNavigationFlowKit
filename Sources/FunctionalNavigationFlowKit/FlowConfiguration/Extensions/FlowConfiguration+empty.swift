@@ -7,5 +7,5 @@
 
 public extension FlowConfiguration {
     /// Null object. Configuration that does nothing.
-    static var empty: FlowConfiguration { FlowConfiguration(preparation: nil, completion: nil) }
+    static var empty: FlowConfiguration { FlowConfiguration() }
 }

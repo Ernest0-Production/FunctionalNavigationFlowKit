@@ -12,7 +12,7 @@ public extension FlowConfiguration {
     ///
     /// - Returns: FlowConfiguration that will zip passed and this configurations.
     func prepending(_ anotherConfiguration: FlowConfiguration) -> FlowConfiguration {
-        FlowConfiguration.zip([anotherConfiguration, self])
+        anotherConfiguration.appending(self)
     }
 
     /// Concatenates passed configuration after this configuration.
@@ -21,6 +21,15 @@ public extension FlowConfiguration {
     ///
     /// - Returns: FlowConfiguration that will zip this and passed configurations.
     func appending(_ anotherConfiguration: FlowConfiguration) -> FlowConfiguration {
-        FlowConfiguration.zip([self, anotherConfiguration])
+        FlowConfiguration(
+            preparation: { departure, destination in
+                self.preparationHandler?(departure, destination)
+                anotherConfiguration.preparationHandler?(departure, destination)
+            },
+            completion: { departure, destination in
+                self.completionHandler?(departure, destination)
+                anotherConfiguration.completionHandler?(departure, destination)
+            }
+        )
     }
 }

@@ -16,13 +16,13 @@ public extension Flow {
     /// - Returns: Flow that log before and after this flow.
     func log(
         prefix: String? = nil,
-        to stream: TextOutputStream? = nil
+        to stream: TextOutputStream = FlowEnvironment.defaultLogTextOutputStream
     ) -> Flow {
-        lazy var finalStream = stream.orDefault
+        lazy var finalStream = stream
 
         return sideEffect(
-            beforeStart: { finalStream.write("\(logPrefix(with: prefix)) Will execute flow") },
-            afterStart: { finalStream.write("\(logPrefix(with: prefix)) Did execute flow") }
+            beforeStart: { finalStream.write(message: "Will execute flow", withPrefix: prefix) },
+            afterStart: { finalStream.write(message: "Did execute flow", withPrefix: prefix) }
         )
     }
 }

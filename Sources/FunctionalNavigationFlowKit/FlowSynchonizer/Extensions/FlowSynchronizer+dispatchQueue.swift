@@ -49,19 +49,31 @@ public extension FlowSynchronizer {
         })
     }
 
-    /// Execute action on specific flow task queue for serially execution.
+    /// Execute action on specific dispatch queue asynchronously awaiting when all tasks in the current group have finished executing.
     ///
-    /// - Parameter queue: Flow task queue  on which action will be executed.
+    /// - Parameters:
+    ///   - group: The dispatch group to associate with the action.
     ///
-    /// - Returns: Synchronizer that provides serially execution on task queue.
-    static func taskQueue(_ queue: FlowTaskQueue) -> FlowSynchronizer {
+    ///   - qos: The QoS at which the flow should be executed.
+    ///
+    ///   - flags: Flags that control the execution environment of the flow.
+    ///
+    ///   - queue: Dispatch queue on which action will be executed.
+    ///
+    /// - Returns: Synchronizer that provides thread safety using dispatch group environment.
+    static func dispatchGroup(
+        _ group: DispatchGroup,
+        qos: DispatchQoS = .unspecified,
+        flags: DispatchWorkItemFlags = [],
+        queue: DispatchQueue
+    ) -> FlowSynchronizer {
         FlowSynchronizer({ action in
-            queue.execute(FlowTask.just(Flow.just(action)))
+            group.notify(
+                qos: qos,
+                flags: flags,
+                queue: queue,
+                execute: action
+            )
         })
-    }
-
-    /// Execute action on shared main flow queue.
-    static var mainTaskQueue: FlowSynchronizer {
-        FlowSynchronizer.taskQueue(FlowTaskQueue.main)
     }
 }

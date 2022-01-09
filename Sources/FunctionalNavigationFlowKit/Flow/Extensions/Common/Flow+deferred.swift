@@ -11,7 +11,7 @@ public extension Flow {
     /// - Parameter flowFactory: Provide flow that will be executed when deferred flow executes.
     ///
     /// - Returns: Flow that awaits own execution before getting and executing flow from factory.
-    static func deferred(_ flowFactory: @escaping Deferred<Flow>) -> Flow {
+    static func deferred(_ flowFactory: @escaping () -> Flow) -> Flow {
         Flow({ flowFactory().execute() })
     }
 }

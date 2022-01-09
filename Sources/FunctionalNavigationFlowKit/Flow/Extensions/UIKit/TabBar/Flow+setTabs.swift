@@ -26,7 +26,7 @@ public extension Flow {
         in tabBar: TabBar,
         animated: Bool = true,
         with configuration: SetTabsFlowConfiguration<TabBar, Tab>  = .empty,
-        _ tabsFactory: @autoclosure @escaping Deferred<[Tab]>
+        _ tabsFactory: @autoclosure @escaping () -> [Tab]
     ) -> Flow {
         Flow({
             let tabs = tabsFactory()

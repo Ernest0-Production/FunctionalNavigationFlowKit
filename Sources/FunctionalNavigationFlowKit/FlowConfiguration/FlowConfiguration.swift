@@ -9,7 +9,7 @@
 public final class FlowConfiguration<Departure, Destination> {
     public typealias Handler = (_ departure: Departure, _ destination: Destination) -> Void
 
-    init(preparation: Handler?, completion: Handler?) {
+    public init(preparation: Handler? = nil, completion: Handler? = nil) {
         self.preparationHandler = preparation
         self.completionHandler = completion
     }

@@ -17,7 +17,7 @@ public typealias SetWindowRootFlowConfiguration<
 
 public extension SetWindowRootFlowConfiguration {
     static var keyAndVisible: SetWindowRootFlowConfiguration {
-        SetWindowRootFlowConfiguration.completion({ window, _ in
+        SetWindowRootFlowConfiguration(completion: { window, _ in
             window.makeKeyAndVisible()
         })
     }
@@ -27,7 +27,7 @@ public extension SetWindowRootFlowConfiguration {
         options: UIView.AnimationOptions = .transitionCrossDissolve,
         completion: Optional<() -> Void> = .none
     ) -> SetWindowRootFlowConfiguration {
-        SetWindowRootFlowConfiguration.completion({ window, _ in
+        SetWindowRootFlowConfiguration(completion: { window, _ in
             UIView.transition(
                 with: window,
                 duration: duration,

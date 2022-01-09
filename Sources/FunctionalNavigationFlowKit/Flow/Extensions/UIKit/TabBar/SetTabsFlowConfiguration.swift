@@ -18,7 +18,7 @@ public typealias SetTabsFlowConfiguration<
 public extension FlowConfiguration {
     // Не знаю почему, но без указания женериков функций, требует явно указать женерик конфигурации
     static func titlePositionAdjustment<TabBar, Tab>(_ offset: UIOffset) -> SetTabsFlowConfiguration<TabBar, Tab> {
-        SetTabsFlowConfiguration.preparation({ tabBar, _ in
+        SetTabsFlowConfiguration(preparation: { tabBar, _ in
             for tabItem in tabBar.tabBar.items ?? [] {
                 tabItem.titlePositionAdjustment = offset
             }
@@ -26,7 +26,7 @@ public extension FlowConfiguration {
     }
 
     static func tabBarDelegate<TabBar, Tab>(_ delegate: UITabBarControllerDelegate) -> SetTabsFlowConfiguration<TabBar, Tab> {
-        SetTabsFlowConfiguration.preparation({ tabBar, _ in
+        SetTabsFlowConfiguration(preparation: { tabBar, _ in
             tabBar.delegate = delegate
         })
     }

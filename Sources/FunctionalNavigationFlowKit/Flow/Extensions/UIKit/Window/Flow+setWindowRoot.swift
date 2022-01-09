@@ -23,7 +23,7 @@ public extension Flow {
     static func setWindowRoot<Window, Root>(
         in window: Window,
         with configuration: SetWindowRootFlowConfiguration<Window, Root> = .empty,
-        _ rootFactory: @autoclosure @escaping Deferred<Root>
+        _ rootFactory: @autoclosure @escaping () -> Root
     ) -> Flow {
         Flow({
             let root = rootFactory()
