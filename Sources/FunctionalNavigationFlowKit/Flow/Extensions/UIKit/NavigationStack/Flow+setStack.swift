@@ -9,12 +9,6 @@
 import UIKit
 
 
-public typealias SetStackFlowConfiguration<
-    NavigationStack: UINavigationController,
-    Item: UIViewController
-> = FlowConfiguration<NavigationStack, [Item]>
-
-
 public extension Flow {
     /// Replaces the view controllers currently managed by the navigation controller with the specified items.
     ///
@@ -26,10 +20,10 @@ public extension Flow {
     ///   - itemsFactory: The view controllers to place in the stack. The front-to-back order of the controllers in this array represents the new bottom-to-top order of the controllers in the navigation stack. Thus, the last item added to the array becomes the top item of the navigation stack.
     ///
     /// - Returns: Flow that set view controller onto navigation controller.
-    static func setStack<NavigationStack, Item>(
+    static func setStack<NavigationStack: UINavigationController, Item: UIViewController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: SetStackFlowConfiguration<NavigationStack, Item> = .empty,
+        with configuration: FlowConfiguration<NavigationStack, [Item]> = .empty,
         _ itemsFactory: @autoclosure @escaping () -> [Item]
     ) -> Flow {
         Flow({
@@ -53,10 +47,10 @@ public extension Flow {
     ///   - itemFactory: The view controller to place in the stack.
     ///
     /// - Returns: Flow that clear navigation stack and set root view controller.
-    static func setStackRoot<NavigationStack, Item>(
+    static func setStackRoot<NavigationStack: UINavigationController, Item: UIViewController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: PushFlowConfiguration<NavigationStack, Item> = .empty,
+        with configuration: FlowConfiguration<NavigationStack, Item> = .empty,
         _ itemFactory: @autoclosure @escaping () -> Item
     ) -> Flow {
         Flow({

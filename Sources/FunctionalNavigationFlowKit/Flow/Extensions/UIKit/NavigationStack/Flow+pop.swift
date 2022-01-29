@@ -9,12 +9,6 @@
 import UIKit
 
 
-public typealias PopFlowConfiguration<
-    NavigationStack: UINavigationController,
-    Item: UIViewController
-> = FlowConfiguration<NavigationStack, Item?>
-
-
 public extension Flow {
     /// Pops the top view controller from the navigation stack and updates the display.
     ///
@@ -26,10 +20,10 @@ public extension Flow {
     ///   - configuration: Flow configuration that executed before and after popping **from top item**.
     ///
     /// - Returns: Flow that pop view controller onto navigation controller.
-    static func pop<NavigationStack>(
+    static func pop<NavigationStack: UINavigationController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: PopFlowConfiguration<NavigationStack, UIViewController> = .empty
+        with configuration: FlowConfiguration<NavigationStack, UIViewController?> = .empty
     ) -> Flow {
         Flow({
             let currentItem = navigationStack.topViewController
@@ -54,10 +48,10 @@ public extension Flow {
     ///   - item: The view controller that you want pop from stack including all upstream items. This view controller must currently be on the navigation stack.
     ///
     /// - Returns: Flow that pop view controllers onto navigation controller.
-    static func pop<NavigationStack, Item>(
+    static func pop<NavigationStack: UINavigationController, Item: UIViewController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: PopFlowConfiguration<NavigationStack, Item> = .empty,
+        with configuration: FlowConfiguration<NavigationStack, Item> = .empty,
         from item: Item
     ) -> Flow {
         Flow({
@@ -85,10 +79,10 @@ public extension Flow {
     ///   - item: The view controller that you want to be at the top of the stack. This view controller must currently be on the navigation stack.
     ///
     /// - Returns: Flow that pop view controllers onto navigation controller.
-    static func pop<NavigationStack, Item>(
+    static func pop<NavigationStack: UINavigationController, Item: UIViewController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: PushFlowConfiguration<NavigationStack, Item> = .empty,
+        with configuration: FlowConfiguration<NavigationStack, Item> = .empty,
         to item: Item
     ) -> Flow {
         Flow({
@@ -110,10 +104,10 @@ public extension Flow {
     ///   - configuration: Flow configuration that executed before and after popping **to root**.
     ///
     /// - Returns: Flow that pop to root view controller onto navigation controller.
-    static func popToRoot<NavigationStack>(
+    static func popToRoot<NavigationStack: UINavigationController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: PopFlowConfiguration<NavigationStack, UIViewController> = .empty
+        with configuration: FlowConfiguration<NavigationStack, UIViewController?> = .empty
     ) -> Flow {
         Flow({
             let rootItem = navigationStack.viewControllers.first

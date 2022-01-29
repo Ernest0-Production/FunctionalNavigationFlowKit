@@ -20,9 +20,9 @@ public extension Flow {
     ///   - rootFactory: The root view controller for the window.
     ///
     /// - Returns: Flow that set view controller for the window.
-    static func setWindowRoot<Window, Root>(
+    static func setWindowRoot<Window: UIWindow, Root: UIViewController>(
         in window: Window,
-        with configuration: SetWindowRootFlowConfiguration<Window, Root> = .empty,
+        with configuration: FlowConfiguration<Window, Root> = .empty,
         _ rootFactory: @autoclosure @escaping () -> Root
     ) -> Flow {
         Flow({

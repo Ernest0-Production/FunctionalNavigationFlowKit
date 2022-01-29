@@ -8,7 +8,6 @@
 #if canImport(UIKit)
 import UIKit
 
-public typealias DismissFlowConfiguration = PresentFlowConfiguration
 
 public extension Flow {
     /// Dismisses the view controller that was presented modally.
@@ -23,9 +22,9 @@ public extension Flow {
     ///   - completion: The flow to execute after the view controller is dismissed.
     ///
     /// - Returns: Flow that dismiss view controller.
-    static func dismiss<Presented>(
+    static func dismiss<Presented: UIViewController>(
         animated: Bool = true,
-        with configuration: DismissFlowConfiguration<UIViewController, Presented> = .empty,
+        with configuration: FlowConfiguration<UIViewController, Presented> = .empty,
         _ presented: Presented,
         completion: Optional<() -> Void> = .none
     ) -> Flow {
@@ -58,9 +57,9 @@ public extension Flow {
     ///   - completion: The flow to execute after the view controller is dismissed.
     ///
     /// - Returns: Flow that dismiss view controller.
-    static func dismiss<Presenting>(
+    static func dismiss<Presenting: UIViewController>(
         animated: Bool = true,
-        with configuration: DismissFlowConfiguration<Presenting, UIViewController> = .empty,
+        with configuration: FlowConfiguration<Presenting, UIViewController> = .empty,
         in presenting: Presenting,
         completion: Optional<() -> Void> = .none
     ) -> Flow {
@@ -93,9 +92,9 @@ public extension Flow {
     ///   - completion: The flow to execute after the view controller is dismissed.
     ///
     /// - Returns: Flow that dismiss view controller.
-    static func dismiss<Presenting>(
+    static func dismiss<Presenting: UIViewController>(
         animated: Bool = true,
-        with configuration: DismissFlowConfiguration<Presenting, UIViewController> = .empty,
+        with configuration: FlowConfiguration<Presenting, UIViewController> = .empty,
         to presenting: Presenting,
         completion: Optional<() -> Void> = .none
     ) -> Flow {

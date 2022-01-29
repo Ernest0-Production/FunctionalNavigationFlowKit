@@ -9,15 +9,9 @@
 import UIKit
 
 
-public typealias SetWindowRootFlowConfiguration<
-    Window: UIWindow,
-    Root: UIViewController
-> = FlowConfiguration<Window, Root>
-
-
-public extension SetWindowRootFlowConfiguration {
-    static var keyAndVisible: SetWindowRootFlowConfiguration {
-        SetWindowRootFlowConfiguration(completion: { window, _ in
+public extension FlowConfiguration where Departure: UIWindow {
+    static var keyAndVisible: FlowConfiguration {
+        FlowConfiguration(completion: { window, _ in
             window.makeKeyAndVisible()
         })
     }
@@ -26,8 +20,8 @@ public extension SetWindowRootFlowConfiguration {
         duration: TimeInterval,
         options: UIView.AnimationOptions = .transitionCrossDissolve,
         completion: Optional<() -> Void> = .none
-    ) -> SetWindowRootFlowConfiguration {
-        SetWindowRootFlowConfiguration(completion: { window, _ in
+    ) -> FlowConfiguration {
+        FlowConfiguration(completion: { window, _ in
             UIView.transition(
                 with: window,
                 duration: duration,

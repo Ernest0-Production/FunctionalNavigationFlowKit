@@ -22,10 +22,10 @@ public extension Flow {
     ///   - itemFactory: The view controller to push onto the stack. This object cannot be a tab bar controller. If the view controller is already on the navigation stack, this method throws an exception.
     ///
     /// - Returns: Flow that push view controller onto navigation controller.
-    static func push<NavigationStack, Item>(
+    static func push<NavigationStack: UINavigationController, Item: UIViewController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: PushFlowConfiguration<NavigationStack, Item> = .empty,
+        with configuration: FlowConfiguration<NavigationStack, Item> = .empty,
         _ itemFactory: @autoclosure @escaping () -> Item
     ) -> Flow {
         Flow({
@@ -51,10 +51,10 @@ public extension Flow {
     ///   - itemFactory: The view controller to push onto the stack. This object cannot be a tab bar controller. If the view controller is already on the navigation stack, this method throws an exception.
     ///
     /// - Returns: Flow that swap top view controller onto navigation controller.
-    static func swapPush<NavigationStack, Item>(
+    static func swapPush<NavigationStack: UINavigationController, Item: UIViewController>(
         in navigationStack: NavigationStack,
         animated: Bool = true,
-        with configuration: PushFlowConfiguration<NavigationStack, Item> = .empty,
+        with configuration: FlowConfiguration<NavigationStack, Item> = .empty,
         _ itemFactory: @autoclosure @escaping () -> Item
     ) -> Flow {
         Flow({

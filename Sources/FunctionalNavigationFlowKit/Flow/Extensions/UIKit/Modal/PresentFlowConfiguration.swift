@@ -9,40 +9,34 @@
 import UIKit
 
 
-public typealias PresentFlowConfiguration<
-    Presenting: UIViewController,
-    Presented: UIViewController
-> = FlowConfiguration<Presenting, Presented>
-
-
-public extension PresentFlowConfiguration {
-    static func transitionStyle(_ modalTransitionStyle: UIModalTransitionStyle) -> PresentFlowConfiguration {
-        PresentFlowConfiguration(preparation: { _, presented in
+public extension FlowConfiguration where Departure: UIViewController, Destination: UIViewController {
+    static func transitionStyle(_ modalTransitionStyle: UIModalTransitionStyle) -> FlowConfiguration {
+        FlowConfiguration(preparation: { _, presented in
             presented.modalTransitionStyle = modalTransitionStyle
         })
     }
 
-    static func presentationStyle(_ modalPresentationStyle: UIModalPresentationStyle) -> PresentFlowConfiguration {
-        PresentFlowConfiguration(preparation: { _, presented in
+    static func presentationStyle(_ modalPresentationStyle: UIModalPresentationStyle) -> FlowConfiguration {
+        FlowConfiguration(preparation: { _, presented in
             presented.modalPresentationStyle = modalPresentationStyle
         })
     }
 
     @available(iOS 13.0, *)
-    static var modalInPresentation: PresentFlowConfiguration {
-        PresentFlowConfiguration(preparation: { _, presented in
+    static var modalInPresentation: FlowConfiguration {
+        FlowConfiguration(preparation: { _, presented in
             presented.isModalInPresentation = true
         })
     }
 
-    static var definingPresentingContext: PresentFlowConfiguration {
-        PresentFlowConfiguration(preparation: { presenting, _ in
+    static var definingPresentingContext: FlowConfiguration {
+        FlowConfiguration(preparation: { presenting, _ in
             presenting.definesPresentationContext = true
         })
     }
     
-    static func transitioningDelegate(_ transitioningDelegate: UIViewControllerTransitioningDelegate) -> PresentFlowConfiguration {
-        PresentFlowConfiguration(preparation: { _, presented in
+    static func transitioningDelegate(_ transitioningDelegate: UIViewControllerTransitioningDelegate) -> FlowConfiguration {
+        FlowConfiguration(preparation: { _, presented in
             presented.transitioningDelegate = transitioningDelegate
         })
     }

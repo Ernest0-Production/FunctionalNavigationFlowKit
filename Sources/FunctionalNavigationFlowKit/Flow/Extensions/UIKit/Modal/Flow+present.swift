@@ -24,10 +24,10 @@ public extension Flow {
     ///   - completion: The flow to execute after the presentation finishes.
     ///
     /// - Returns: Flow that present view controller.
-    static func present<Presenting, Presented>(
+    static func present<Presenting: UIViewController, Presented: UIViewController>(
         in presenting: Presenting,
         animated: Bool = true,
-        with configuration: PresentFlowConfiguration<Presenting, Presented> = .empty,
+        with configuration: FlowConfiguration<Presenting, Presented> = .empty,
         _ presentedFactory: @escaping @autoclosure () -> Presented,
         completion: Optional<() -> Void> = .none
     ) -> Flow {
