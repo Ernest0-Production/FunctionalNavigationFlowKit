@@ -24,7 +24,7 @@ public extension FlowSynchronizer {
     /// - Returns: Synchronizer that provides thread safety using dispatch queue environment.
     static func dispatchQueue(
         _ queue: DispatchQueue,
-        group: DispatchGroup? = nil,
+        group: Optional<DispatchGroup> = nil,
         qos: DispatchQoS = .unspecified,
         flags: DispatchWorkItemFlags = []
     ) -> FlowSynchronizer {

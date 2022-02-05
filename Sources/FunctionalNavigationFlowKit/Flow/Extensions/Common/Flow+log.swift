@@ -15,8 +15,8 @@ public extension Flow {
     ///
     /// - Returns: Flow that log before and after this flow.
     func log(
-        prefix: String? = nil,
-        to stream: TextOutputStream = FlowEnvironment.defaultLogTextOutputStream
+        prefix: Optional<String> = nil,
+        to stream: TextOutputStream = FlowEnvironment.defaultLogStream()
     ) -> Flow {
         lazy var finalStream = stream
 

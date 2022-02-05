@@ -19,7 +19,7 @@ public extension Optional where Wrapped == Flow {
         }
     }
 
-    func replaceNil(on defaultFlow: Wrapped?) -> Wrapped? {
+    func replaceNil(on defaultFlow: Optional<Wrapped>) -> Wrapped? {
         switch self {
         case let Optional.some(flow):
             return flow

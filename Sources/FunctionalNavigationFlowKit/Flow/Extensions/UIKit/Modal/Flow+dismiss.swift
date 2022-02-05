@@ -30,7 +30,7 @@ public extension Flow {
     ) -> Flow {
         Flow({
             guard let presenting = presented.presentingViewController else {
-                throwException("\(presented) has not presenting View Controller")
+                FlowEnvironment.exceptionsHandler.throw("\(presented) has not presenting View Controller")
                 return
             }
 
@@ -65,7 +65,7 @@ public extension Flow {
     ) -> Flow {
         Flow({
             guard let presented = presenting.presentedViewController else {
-                throwException("\(presenting) has not any presented View Controller ")
+                FlowEnvironment.exceptionsHandler.throw("\(presenting) has not any presented View Controller ")
                 return
             }
 

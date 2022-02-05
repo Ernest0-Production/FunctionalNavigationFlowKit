@@ -8,7 +8,10 @@
 private let tag = "[FunctionalNavigationFlowKit]"
 
 extension TextOutputStream {
-    mutating func write(message: String, withPrefix userDefinedPrefix: String? = nil) {
+    mutating func write(
+        message: String,
+        withPrefix userDefinedPrefix: Optional<String> = nil
+    ) {
         if let userDefinedPrfix = userDefinedPrefix {
             write("\(tag) \(userDefinedPrfix) – \(message)")
         } else {

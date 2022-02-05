@@ -16,7 +16,7 @@ public extension FlowConfiguration {
     /// - Returns: FlowConfiguration that log preparation and completion of flow.
     func log(
         prefix: String? = nil,
-        to stream: TextOutputStream = FlowEnvironment.defaultLogTextOutputStream
+        to stream: TextOutputStream = FlowEnvironment.defaultLogStream()
     ) -> FlowConfiguration {
         lazy var finalStream = stream
 
