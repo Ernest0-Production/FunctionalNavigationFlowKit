@@ -6,7 +6,7 @@
 //
 
 public extension Flow {
-    /// Wraps closure into flow.
+    /// Create flow from closure.
     ///
     /// - Parameter execute: Closure to be executed.
     ///

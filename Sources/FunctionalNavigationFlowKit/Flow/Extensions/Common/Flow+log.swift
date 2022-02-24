@@ -20,9 +20,8 @@ public extension Flow {
     ) -> Flow {
         lazy var finalStream = stream
 
-        return sideEffect(
-            beforeStart: { finalStream.write(message: "Will execute flow", withPrefix: prefix) },
-            afterStart: { finalStream.write(message: "Did execute flow", withPrefix: prefix) }
-        )
+        return self
+            .beforeStart({ finalStream.write(message: "Will execute flow", withPrefix: prefix) })
+            .afterStart({ finalStream.write(message: "Did execute flow", withPrefix: prefix) })
     }
 }

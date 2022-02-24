@@ -19,16 +19,23 @@ public func build<Object>(_ builder: () -> Object) -> Object {
 /// - Parameter builder: Scope for initializing object and making some additional things on it before return result **and with ability to get result-future before returning**.
 ///
 /// - Returns: Resulting object.
-public func buildWithPointer<Object>(_ builder: (@escaping () -> Object) -> Object) -> Object {
-    var pointer = Optional<AnyObject>.none
+public func build<Object>(_ builder: (ObjectBuildResultPointer<Object>) -> Object) -> Object {
+    let pointer = ObjectBuildResultPointer<Object>()
 
-    let pointerGetter: () -> Object = { [weak pointer] in
-        assert(pointer != nil, "early access to uninitialized object")
-        return pointer as! Object
-    }
-
-    let object = builder(pointerGetter)
-    pointer =  object as Optional<AnyObject>
+    let object = builder(pointer)
+    pointer.value = object
 
     return object
+}
+
+public final class ObjectBuildResultPointer<Object> {
+    private weak var _value: AnyObject?
+
+    fileprivate(set) public var value: Object {
+        get {
+            assert(_value != nil, "early access to uninitialized object")
+            return _value as! Object
+        }
+        set { _value = newValue as AnyObject }
+    }
 }

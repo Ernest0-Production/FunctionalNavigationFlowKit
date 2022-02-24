@@ -6,14 +6,14 @@
 //
 
 public extension Flow {
-    /// Allows recursively reference to the flow building inside flow building.
+    /// Build flow that has recursively reference to the self flow build closure.
     ///
     /// - Parameters:
     ///   - input: Initial input value for building flow.
     ///
-    ///   - body: Flow building implemantation that takes required inputs and reference to closure that execute same.
+    ///   - body: Flow building implemantation that takes required inputs and reference to the same flow build closure.
     ///
-    /// - Returns: Flow that execute passed flow implementation.
+    /// - Returns: Flow that create and execute passed flow build.
     static func recursive<Input>(
         initialInput: Input,
         _ body: @escaping (Input, _ itself: @escaping (Input) -> Flow) -> Flow
@@ -27,11 +27,11 @@ public extension Flow {
         return recursiveFunction(initialInput)
     }
 
-    /// Allows recursively reference to the flow building inside flow building.
+    /// Build flow that has recursively reference to the self flow build closure as input argument of flow build.
     ///
-    /// - Parameter body: Flow building implemantation that takes reference to closure that execute same.
+    /// - Parameter body: Flow building implemantation that takes reference to the same flow build closure.
     ///
-    /// - Returns: Flow that execute passed flow implementation.
+    /// - Returns: Flow that create and execute passed flow build.
     static func recursive(
         _ body: @escaping (_ itself: @escaping () -> Flow) -> Flow
     ) ->  Flow {

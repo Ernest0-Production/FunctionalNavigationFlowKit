@@ -25,14 +25,14 @@ public extension Flow {
     ///          )
     ///       ])
     ///
-    /// - Parameter flows: Ordered list of the flow that should be executed serially.
+    /// - Parameter flows: Ordered sequence of the flow which will be executed sequentially.
     ///
-    /// - Returns: Flow that will serially execute passed list of flow.
+    /// - Returns: Flow that will serially execute passed sequence of flow.
     static func zip<FlowSequence: Sequence>(_ flows: FlowSequence) -> Flow where FlowSequence.Element == Flow {
         flows.reduce(Flow.empty, { $0.then($1) })
     }
 
-    /// Concatenates the passed flow after this flow.
+    /// Execute passed flow after this flow.
     ///
     /// - Example:
     ///
@@ -48,7 +48,7 @@ public extension Flow {
     ///               [ProfileSettingsViewController(...)]
     ///           ))
     ///
-    /// - Parameter flows: Ordered list of the flow that should be executed serially.
+    /// - Parameter nextFlow: Flow to be executed after this flow.
     ///
     /// - Returns: Flow that will serially execute this and passed flows.
     func then(_ nextFlow: Flow) -> Flow {

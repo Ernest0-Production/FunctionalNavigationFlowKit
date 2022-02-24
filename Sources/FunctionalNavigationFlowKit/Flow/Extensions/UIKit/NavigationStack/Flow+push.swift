@@ -59,14 +59,49 @@ public extension Flow {
     ) -> Flow {
         Flow({
             let item = itemFactory()
-            var stackItems = navigationStack.viewControllers
 
+            var stackItems = navigationStack.viewControllers
             _ = stackItems.popLast()
             stackItems.append(item)
 
             configuration.preparationHandler?(navigationStack, item)
 
             navigationStack.setViewControllers(stackItems, animated: animated)
+
+            configuration.completionHandler?(navigationStack, item)
+        }).synchonize(with: .mainThread)
+    }
+
+    /// Pop passed view controller and pushes new view controller onto the navigation stack and updates the display.
+    ///
+    /// - Parameters:
+    ///   - navigationStack: Navigation controller in which the view controller will be pushed.
+    ///
+    ///   - animated: Specify true to animate the transition or false if you do not want the transition to be animated. You might specify false if you are setting up the navigation controller at launch time.
+    ///
+    ///   - configuration: Flow configuration that executed before and after swapping push.
+    ///
+    ///   - itemFactory: The view controller to push onto the stack. This object cannot be a tab bar controller. If the view controller is already on the navigation stack, this method throws an exception.
+    ///
+    /// - Returns: Flow that swap top view controller onto navigation controller.
+    static func swapPush<NavigationStack: UINavigationController, Item: UIViewController>(
+        in navigationStack: NavigationStack,
+        animated: Bool = true,
+        with configuration: FlowConfiguration<NavigationStack, Item> = .empty,
+        from swappingItem: UIViewController,
+        _ itemFactory: @autoclosure @escaping () -> Item
+    ) -> Flow {
+        Flow({
+            var stackItems = navigationStack.viewControllers
+                .drop(while: { $0 !== swappingItem })
+                .dropLast()
+
+            let item = itemFactory()
+            stackItems.append(item)
+
+            configuration.preparationHandler?(navigationStack, item)
+
+            navigationStack.setViewControllers(Array(stackItems), animated: animated)
 
             configuration.completionHandler?(navigationStack, item)
         }).synchonize(with: .mainThread)

@@ -19,7 +19,7 @@ public extension FlowConfiguration where Departure: UIWindow {
     static func animated(
         duration: TimeInterval,
         options: UIView.AnimationOptions = .transitionCrossDissolve,
-        completion: Optional<() -> Void> = .none
+        onComplete completion: Optional<() -> Void> = .none
     ) -> FlowConfiguration {
         FlowConfiguration(completion: { window, _ in
             UIView.transition(

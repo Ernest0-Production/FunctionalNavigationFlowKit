@@ -6,22 +6,27 @@
 //
 
 public extension Flow {
-    /// Middleware fow adding any side effects that should not affect on the flow execution.
+    /// Middleware for adding side effects that executes before executing this flow.
     ///
-    /// - Parameters:
-    ///   - beforeStart: executes before starting flow execution.
+    /// - Parameter execute: action that executes before starting flow execution.
     ///
-    ///   - afterStart: executes after starting flow execution.
-    ///
-    /// - Returns: Flow that incapsulate side effects while executing this flow.
-    func sideEffect(
-        beforeStart: Optional<() -> Void> = .none,
-        afterStart: Optional<() -> Void> = .none
-    ) -> Flow {
-        Flow({ [self] in
-            beforeStart?()
+    /// - Returns: Flow that execute this flow and additonal action before it.
+    func beforeStart(_ execute: @escaping () -> Void) -> Flow {
+        Flow({
             execute()
-            afterStart?()
+            self.execute()
+        })
+    }
+
+    /// Middleware for adding side effects that executes after executing this flow.
+    ///
+    /// - Parameter execute: action that executes after starting flow execution.
+    ///
+    /// - Returns: Flow that execute this flow and additonal action after it.
+    func afterStart(_ execute: @escaping () -> Void) -> Flow {
+        Flow({
+            self.execute()
+            execute()
         })
     }
 }

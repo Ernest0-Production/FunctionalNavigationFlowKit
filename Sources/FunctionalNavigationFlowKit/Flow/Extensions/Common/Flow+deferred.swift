@@ -6,11 +6,11 @@
 //
 
 public extension Flow {
-    /// Wraps flow build and execution and performs them deferred when execute wrapper.
+    /// Wraps flow build and execution and performs them deferred when execute this flow.
     ///
-    /// - Parameter flowFactory: Provide flow that will be executed when deferred flow executes.
+    /// - Parameter flowFactory: Provide flow that will be executed when this flow executes.
     ///
-    /// - Returns: Flow that awaits own execution before getting and executing flow from factory.
+    /// - Returns: Flow that create and execute passed flow build.
     static func deferred(_ flowFactory: @escaping () -> Flow) -> Flow {
         Flow({ flowFactory().execute() })
     }

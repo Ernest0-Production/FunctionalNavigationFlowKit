@@ -6,10 +6,12 @@
 //
 
 public extension Optional where Wrapped == Flow {
+    /// Return Flow.empty when this flow is nil.
     var orEmpty: Wrapped {
         replaceNil(on: Wrapped.empty)
     }
 
+    /// Return passed flow when this flow is nil.
     func replaceNil(on defaultFlow: Wrapped) -> Wrapped {
         switch self {
         case let Optional.some(flow):
@@ -19,6 +21,7 @@ public extension Optional where Wrapped == Flow {
         }
     }
 
+    /// Return passed flow when this flow is nil.
     func replaceNil(on defaultFlow: Optional<Wrapped>) -> Wrapped? {
         switch self {
         case let Optional.some(flow):

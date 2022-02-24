@@ -29,9 +29,50 @@ public extension Flow {
         animated: Bool = true,
         with configuration: FlowConfiguration<Presenting, Presented> = .empty,
         _ presentedFactory: @escaping @autoclosure () -> Presented,
-        completion: Optional<() -> Void> = .none
+        onComplete completion: Optional<() -> Void> = .none
     ) -> Flow {
         Flow({
+            let presented = presentedFactory()
+
+            configuration.preparationHandler?(presenting, presented)
+
+            presenting.present(
+                presented,
+                animated: animated,
+                completion: completion
+            )
+
+            configuration.completionHandler?(presenting, presented)
+        }).synchonize(with: .mainThread)
+    }
+
+    /// Presents a view controller modally in topmost of presenting controllers hierarchy.
+    ///
+    /// - Parameters:
+    ///   - presenting: View controller from which the topmost controller will be presented presenting view controller.
+    ///
+    ///   - animated: Pass true to animate the presentation; otherwise, pass false.
+    ///
+    ///   - configuration: Flow configuration that executed before and after presenting.
+    ///
+    ///   - presentedFactory: View controller to be preesnted.
+    ///
+    ///   - completion: The flow to execute after the presentation finishes.
+    ///
+    /// - Returns: Flow that present view controller.
+    static func present<Presented: UIViewController>(
+        inTopmost presenting: UIViewController,
+        animated: Bool = true,
+        with configuration: FlowConfiguration<UIViewController, Presented> = .empty,
+        _ presentedFactory: @escaping @autoclosure () -> Presented,
+        onComplete completion: Optional<() -> Void> = .none
+    ) -> Flow {
+        Flow({
+            var presenting = presenting
+            while let topmostPresenting = presenting.presentingViewController {
+                presenting = topmostPresenting
+            }
+
             let presented = presentedFactory()
 
             configuration.preparationHandler?(presenting, presented)
