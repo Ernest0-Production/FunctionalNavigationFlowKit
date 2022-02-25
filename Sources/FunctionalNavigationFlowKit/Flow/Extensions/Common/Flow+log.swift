@@ -18,7 +18,7 @@ public extension Flow {
         prefix: Optional<String> = nil,
         to stream: TextOutputStream = FlowEnvironment.defaultLogStream()
     ) -> Flow {
-        lazy var finalStream = stream
+        var finalStream = stream
 
         return self
             .beforeStart({ finalStream.write(message: "Will execute flow", withPrefix: prefix) })

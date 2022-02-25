@@ -2,6 +2,7 @@ import FunctionalNavigationFlowKit
 import XCTest
 import Combine
 
+
 final class FunctionalNavigationFlowKitTests: XCTestCase {
     func test_recursiveFlow() {
         var recursiveFlowCall: (() -> Void)? = .none

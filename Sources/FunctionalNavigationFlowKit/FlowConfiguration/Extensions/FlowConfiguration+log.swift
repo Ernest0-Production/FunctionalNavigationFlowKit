@@ -18,7 +18,7 @@ public extension FlowConfiguration {
         prefix: String? = nil,
         to stream: TextOutputStream = FlowEnvironment.defaultLogStream()
     ) -> FlowConfiguration {
-        lazy var finalStream = stream
+        var finalStream = stream
 
         return FlowConfiguration(
             preparation: {
