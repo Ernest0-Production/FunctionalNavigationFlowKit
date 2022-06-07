@@ -1,79 +1,68 @@
 # FunctionalNavigationFlowKit
 
-Функциональный способ описания UI навигации. 
+A framework for describing application screens navigation in a declarative way as **navigation map** 🗺
 
-## 🗺 Пример
+## 🗺 Example
 ```swift
-SetWindowRootFlow(
+Flow.setWindowRoot(
     in: window,
-    configuration: .combine(.keyAndVisible, .animated(duration: 0.3)),
-    DeferredBuild(MainTabBarController.init, with: {  rootController in
-
-        SetTabBarItemsFlow(
+    with: .zip(
+        .keyAndVisible, 
+        .animated(duration: 0.3)
+    ),
+    MainTabBarController().withFlow({  (rootController: MainTabBarController) in
+        Flow.setTabs(
             in: rootController,
-            configuration: .titlePositionAdjustment(UIOffset(horizontal: 0.0, vertical: -4.0)),
-            items: [
-
-                DeferredBuild(UINavigationController.init, with: { navigationController in
-
-                    PushFlow(
+            with: .titlePositionAdjustment(UIOffset(horizontal: 0.0, vertical: -4.0)),
+            [
+                UINavigationController().withFlow({ navigationController in
+                    Flow.push(
                         in: navigationController: navigationController,
                         animated: false,
-                        configuration: .title("Feed"),
+                        with: .title("Feed"),
                         FeedViewController(
-
-                            searchFlow: PushFlow(
+                            searchFlow: Flow.push(
                                 in: navigationController,
                                 SearchViewController()
                             ),
-
                             itemFlow: { item in
-                                PushFlow(
+                                Flow.push(
                                     in: navigationController,
-                                    configuration: .combine(
+                                    with: .zip(
                                         .title(item.name),
                                         .hidesBottomBarWhenPushed
                                     ),
                                     ItemDetailsViewController(
                                         with: item,
-                                        commentsFlow: PresentFlow(
+                                        commentsFlow: Flow.present(
                                             in: navigationController,
                                             CommentsViewController(item: item)
                                         )
                                     )
                                 )
                             }
-
                         )
                     )
-
                 }),
 
-                DeferredBuild(UINavigationController.init, with: { navigationController in
-
-                    PushFlow(
+                UINavigationController().withFlow({ navigationController in
+                    Flow.push(
                         in: navigationController,
-                        configuration: .title("Profile"),
+                        with: .title("Profile"),
                         ProfileViewController(
-
                             settingsFlow: PushFlow(
                                 in: navigationController,
-                                configuration: .title("Settings"),
+                                with: .title("Settings"),
                                 SettingsViewController(
-                                    saveCompletionFlow: PopFlow(in: navigationController)    
+                                    saveCompletionFlow: Flow.pop(in: navigationController)    
                                 )
                             ),
-
-                            logoutFlow: AuthorizationFlow
-
+                            logoutFlow: <#Authorization Flow#>
                         )
                     )
-
                 }
-
             ]
         )
-
     })
 )
 
@@ -81,8 +70,8 @@ SetWindowRootFlow(
 
 ## Overview
 
-- [Требования](#requirements)
-- [В чем смысл?](#-в-чем-смысл)
+- [Requirements](#requirements)
+- [Proposal](#-Proposal)
 - [Конфигурация Flow](#%EF%B8%8F-конфигурация-flow)
 - [Как использовать?](#как-использовать)
 - [Зачем все это нужно?](#-зачем-все-это-нужно-чем-это-лучше-coordinator---паттерна)
@@ -95,111 +84,114 @@ SetWindowRootFlow(
 
 - iOS 9.0+
 - Xcode 10.0+
-- Swift 5.0+
+- Swift 4.0+
 
 
-## 🤨 В чем смысл?
-Навигация - это действие (push, flow, set, и т.д.).\
-Действие можно описать ввиде кложура `() -> Void`. Называть его будем просто `Flow`.\
-Теперь можем написать фабрику методов для создания `Flow`. В данном фреймворке представлены следующие (базовые) методы:
-#### `PushFlow`
-[PushFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PushFlow.swift)
+## 💡 Proposal
+Navigation - is an action (like push, flow, set, etc.)\
+The action can be described as a closure `() -> Void`. Let's just call it `Flow`.\
+Now we can write a method factory to create `Flow`. This framework provides basic factory methods:
+#### `Flow.push`
+[Flow.push.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Flow/Extensions/UIKit/NavigationStack/Flow+push.swift)
 ```swift
-PushFlow(
+Flow.push(
     in: myNavigationController,
     MyViewController()
 )
 ```
-#### `PopFlow`
-[PopFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PopFlow.swift)
+#### `Flow.pop`
+[Flow+pop.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Flow/Extensions/UIKit/NavigationStack/Flow+pop.swift)
 ```swift
-PopFlow(in: myNavigationController)
+Flow.pop(in: myNavigationController)
 
-PopFlow(
+Flow.pop(
     in: myNavigationController,
     to: secondViewControlller
 )
 
-PopToRootFlow(in: myNavigationController)
+Flow.pop(
+    in: myNavigationController,
+    from: secondViewControlller
+)
+
+Flow.popToRoot(in: myNavigationController)
 ```
-#### `PresentFlow`
-[PresentFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Present/PresentFlow.swift)
+#### `Flow.present`
+[Flow+present.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Flow/Extensions/UIKit/Modal/Flow+present.swift)
 ```swift
-Present(
+Flow.present(
     in: rootViewController,
     MyModalViewController()
 )
 
-// Ищет самый верхний контроллер в окне и презентит в нём.
-Present(
-    in: window,
+// Looks for the topmost viewController and calls the present flow in itself
+Flow.present(
+    inTopmost: window.rootViewContoller!,
     MyModalViewController()
 )
 ```
-#### `DismissFlow`
-[DismissFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Present/DismissFlow.swift)
+#### `Flow.dismiss`
+[Flow+dismiss.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Flow/Extensions/UIKit/Modal/Flow+dismiss.swift)
 ```swift
-DismissFlow(myViewController)
+Flow.dismiss(myViewController)
 
-// Дисмисит контроллер, который презентовал указанный контроллер
-DismissFlow(in: presentedViewController)
-
-// Дисмисит самой верхний контроллер в окне
-DismissFlow(in: window)
+Flow.dismiss(to: rootViewController)
 ```
-#### `SetTabBarItemsFlow`
-[SetTabBarItemsFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetTabBarItems/SetTabBarItemsFlow.swift)
+#### `Flow.setTabs`
+[Flow+setTabs.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Flow/Extensions/UIKit/TabBar/Flow+setTabs.swift)
 ```swift
-SetTabBarItemsFlow(
+Flow.setTabs(
     in: tabBarController,
-    items: [
+    [
         FeedViewController(),
         ProfileViewController(),
     ]
 )
 ```
-#### `SetWindowRootFlow`
-[SetWindowRootFlow.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/SetWindowRoot/SetWindowRootFlow.swift)
+#### `Flow.setWindowRoot`
+[Flow+setWindowRoot.swift](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Flow/Extensions/UIKit/Window/Flow+setWindowRoot.swift)
 ```swift
-SetWindowRootFlow(
+Flow.setWindowRoot(
     in: window,
     myRootViewController
 )
 ```
 
-Если этого кажется недостаточным, вы можете написать свою функцию аналогичным образом через глобальные функции возвращающие Flow (т.е. кложур).
-Например, флоу с пушем и удалением предыдущего экрана может быть реализован так:
+if that doesn't seem enough, you can write yourself `Flow` extension like this.
+For example, lets make push and replace last item on the navigation stack:
 ```swift
-PushReplacingFlow(
+// Design
+Flow.swapPush(
     in: navigationController,
     MyViewController()
 )
 
+// Implementation
+extension Flow { 
+    func swapPush(
+        in navigationStack: UINavigationController,
+        animated: Bool = true,
+        _ itemFactory: @autoclosure @escaping () -> UIViewController
+    ) -> Flow {
+         Flow.just({
+            let item = itemFactory()
 
-func PushReplacingFlow(
-    in navigationController: UINavigationController,
-    animated: Bool = true,
-    _ viewController: @autoclosure @escaping UIViewController
-) -> Flow { 
-    return { 
-        var newStack = navigationController.viewControllers
-        newStack.removeLast()
-        newStack.append(viewController())
+            var stackItems = navigationController.viewControllers
+            _ = stackItems.popLast()
+            stackItems.append(item)
 
-        navigationController.setViewControllers(
-            viewControllers: newStack,
-            animated: animated
-        )
+            navigationStack.setViewControllers(stackItems, animated: animated)
+        })
     }
 }
 ```
 
 
-## ⚙️ Конфигурация `Flow`
-Каждый `Flow` имеет конфигурацию [`FlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/FlowConfiguration.swift), которая запускается **перед** и **после** выполнения.
+## ⚙️ `Flow` configuration
+Every UIKit `Flow` can have configuration [`FlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/FlowConfiguration/FlowConfiguration.swift), that intercept start and end of flow execution.
 ```swift
 let configuration = FlowConfiguration<UINavigationController, UIViewController>(
-    prepare: { navigationController, viewController in  
+    preparation: { navigationController, viewController in  
         navigationController.setNavigationBarHidden(true, animated: false)
     },
     completion: { navigationController, viewController in
@@ -207,14 +199,14 @@ let configuration = FlowConfiguration<UINavigationController, UIViewController>(
     }
 )
 
-return PushFlow(
+return Flow.push(
     in: navigationController,
-    configuration: configuration,
+    with: configuration,
     SubscriptionViewController()
 )
 ```
 
-Фреймфорк уже предоставляет базовый набор конфигураций:
+The framework already provides basic configurations factory:
 ---
  [`PushFlowConfiguration`](https://github.com/Ernest0-Production/FunctionalNavigationFlowKit/blob/main/Sources/FunctionalNavigationFlowKit/Push/PushFlowConfiguration.swift) == `FlowConfiguration<UINavigationController, UIViewController>`
 - `hidesBottomBarWhenPushed`
@@ -235,18 +227,17 @@ return PushFlow(
 - `keyAndVisible`
 - `animated(duration: TimeInterval, completion: Flow?)`
 ---
-## ⏰ Ленивая инициализация
-Презентуемые контроллеры инициализируются **только при запуске `Flow`!**
+## ⏰ Lazy view controller initialization
+Passed presented/pushed view controller in the flow will only be initialized when the flow is executed.
 
-`Push/Present/Set/...Flow` принимают `() -> ViewController` билдер.
-> Для каждого представленного `Flow` есть альтернативная инициализация с `@autoclosure` билдером.
+`push/present/set/...Flow` take `@escaping @autoclosure () -> ViewController` signature into argument.
 ```swift
-// контроллер еще не проинициализирован
-let flow = PushFlow(
+// Controller not yet initialized
+let flow = Flow.push(
     in: myNavigationController,
     MyViewController()
 )
-// контроллер проинициализирован и запушен
+// Controller alredy initialized
 flow()
 ```
 
